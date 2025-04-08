@@ -199,9 +199,9 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.picoxr": {
-      "version": "file:PICO-Unity-Integration-SDK-2.5.0",
+      "version": "file:C:/Users/ochme/projects/unityPico/PICO-Unity-Integration-SDK-2.5.0",
       "depth": 0,
-      "source": "embedded",
+      "source": "local",
       "dependencies": {
         "com.unity.xr.management": "4.0.0",
         "com.unity.xr.interaction.toolkit": "2.0.0"
