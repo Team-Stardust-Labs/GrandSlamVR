@@ -9,8 +9,8 @@ public class NetworkPhysicsTransformClient : NetworkBehaviour
     protected Rigidbody m_Rigidbody;
     
     private NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>(writePerm: NetworkVariableWritePermission.Owner);
-    private NetworkVariable<bool> networkKinematic = new NetworkVariable<bool>(writePerm: NetworkVariableWritePermission.Owner);
-    private NetworkVariable<bool> networkUseGravity = new NetworkVariable<bool>(writePerm: NetworkVariableWritePermission.Owner);
+    
+    //private NetworkVariable<bool> networkUseGravity = new NetworkVariable<bool>(writePerm: NetworkVariableWritePermission.Owner);
 
     private void Awake()
     {
@@ -25,20 +25,17 @@ public class NetworkPhysicsTransformClient : NetworkBehaviour
 
     private void Start()
     {
-        // Apply changes when the network values are updated
-        networkKinematic.OnValueChanged += (oldVal, newVal) =>
-        {
-            if (m_Rigidbody != null) m_Rigidbody.isKinematic = newVal;
-        };
-
-        networkUseGravity.OnValueChanged += (oldVal, newVal) =>
+        /*networkUseGravity.OnValueChanged += (oldVal, newVal) =>
         {
             if (m_Rigidbody != null) m_Rigidbody.useGravity = newVal;
-        };
+        };*/
     }
 
     private void FixedUpdate()
     {
+
+        m_Rigidbody.useGravity = IsOwner;
+
         if (IsOwner)
         {
             // Send position
@@ -47,17 +44,15 @@ public class NetworkPhysicsTransformClient : NetworkBehaviour
             // Sync kinematic/gravity settings
             if (m_Rigidbody != null)
             {
-                if (networkKinematic.Value != m_Rigidbody.isKinematic)
-                    networkKinematic.Value = m_Rigidbody.isKinematic;
-
+                /*
                 if (networkUseGravity.Value != m_Rigidbody.useGravity)
-                    networkUseGravity.Value = m_Rigidbody.useGravity;
+                    networkUseGravity.Value = m_Rigidbody.useGravity;*/
             }
         }
         else
         {
             // Interpolate using Rigidbody physics
-            if (m_Rigidbody != null && !m_Rigidbody.isKinematic)
+            if (m_Rigidbody != null)
             {
                 Vector3 newPos = Vector3.Lerp(m_Rigidbody.position, networkPosition.Value, Time.fixedDeltaTime * positionLerpSpeed);
                 m_Rigidbody.MovePosition(newPos);
