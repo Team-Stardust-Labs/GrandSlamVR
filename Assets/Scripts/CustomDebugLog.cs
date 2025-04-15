@@ -15,23 +15,24 @@ public class CustomDebugLog : MonoBehaviour
     }
 
     private string text = "";
+    private string ntext = "";
 
 
     public void Log(string txt) {
         text += txt + "\n";
         Debug.Log(txt);
-        textObject.GetComponent<UnityEngine.UI.Text>().text = getText();
+        textObject.GetComponent<UnityEngine.UI.Text>().text = getText(text);
     }
 
 
     public void LogNetworkManager(string txt) {
-        text += txt + "\n";
+        ntext += txt + "\n";
         Debug.Log(txt);
-        textObjectNetworking.GetComponent<UnityEngine.UI.Text>().text = getText();
+        textObjectNetworking.GetComponent<UnityEngine.UI.Text>().text = getText(ntext);
     }
     
 
-    string getText() {
-        return text.Substring(Mathf.Max(text.Length - 500, 0), Mathf.Min(500, text.Length));
+    string getText(string txt = "") {
+        return txt.Substring(Mathf.Max(txt.Length - 500, 0), Mathf.Min(500, txt.Length));
     }
 }
