@@ -9,7 +9,7 @@ namespace XRMultiplayer
     /// NetworkInteractableGrab adds some extra functionality to the NetworkBaseInteractable class
     /// to allow for better immediate feedback on non owner players.
     /// </summary>
-    [RequireComponent(typeof(Rigidbody), typeof(CustomNetworkTransformClient))]
+    [RequireComponent(typeof(Rigidbody), typeof(NetworkPhysicsTransformClient))]
     public class NetworkPhysicsInteractable : NetworkBaseInteractable
     {
         /// <summary>
@@ -47,7 +47,7 @@ namespace XRMultiplayer
         /// <summary>
         /// Client Network Transform used for synchronizing transform data.
         /// </summary>
-        protected CustomNetworkTransformClient m_NetworkTransformClient;
+        protected NetworkPhysicsTransformClient m_NetworkPhysicsTransformClient;
 
         protected Rigidbody m_Rigidbody;
         protected Collider m_Collider;
@@ -77,14 +77,14 @@ namespace XRMultiplayer
             CustomDebugLog.Singleton.LogNetworkManager("NetworkPhysicsInteractable Awake and Initialized");
 
             // Get associated required components
-            if (!TryGetComponent(out m_Rigidbody) || !TryGetComponent(out m_NetworkTransformClient))
+            if (!TryGetComponent(out m_Rigidbody) || !TryGetComponent(out m_NetworkPhysicsTransformClient))
             {
-                CustomDebugLog.Singleton.LogNetworkManager("Missing Components! Disabling Now.");
+                CustomDebugLog.Singleton.LogNetworkManager("PHYSICS-INTERACTABLE: Missing Components! Disabling Now.");
                 enabled = false;
                 return;
             }
             m_CurrentCalculatedVelocity = new Vector3[m_FramesToCalculate];
-            m_NetworkTransformClient.enabled = false;
+            m_NetworkPhysicsTransformClient.enabled = false;
             m_Collider = GetComponentInChildren<Collider>();
         }
 
@@ -121,7 +121,7 @@ namespace XRMultiplayer
                 m_Rigidbody.constraints = spawnLocked ? RigidbodyConstraints.FreezeAll : RigidbodyConstraints.None;
             }
 
-            m_NetworkTransformClient.enabled = syncSelect;
+            m_NetworkPhysicsTransformClient.enabled = syncSelect;
         }
 
         /// <inheritdoc/>
@@ -219,7 +219,7 @@ namespace XRMultiplayer
             // Disable the network transform to allow smooth interaction with high latency and wait for ownership or timeout to re-enable.
             if (CanHold() & !IsOwner)
             {
-                m_NetworkTransformClient.enabled = false;
+                m_NetworkPhysicsTransformClient.enabled = false;
             }
         }
 
@@ -236,7 +236,7 @@ namespace XRMultiplayer
             if (!IsOwner)
             {
                 // Enable Network Transform if releasing the object before ownership has been gained.
-                m_NetworkTransformClient.enabled = true;
+                m_NetworkPhysicsTransformClient.enabled = true;
             }
 
             if (IsOwner)
@@ -262,7 +262,7 @@ namespace XRMultiplayer
             {
                 CustomDebugLog.Singleton.LogNetworkManager("INTERACTION: GAINED Ownership");
                 m_RequestingOwnership = false;
-                m_NetworkTransformClient.enabled = true;
+                m_NetworkPhysicsTransformClient.enabled = true;
                 m_IsInteracting.Value = baseInteractable.isSelected;
                 if (!baseInteractable.isSelected & !m_Rigidbody.isKinematic)
                 {
@@ -280,7 +280,7 @@ namespace XRMultiplayer
             CustomDebugLog.Singleton.LogNetworkManager("INTERACTION: LOST Ownership");
             if (checkOwnershipRoutine != null) StopCoroutine(checkOwnershipRoutine);
             m_RequestingOwnership = false;
-            m_NetworkTransformClient.enabled = true;
+            m_NetworkPhysicsTransformClient.enabled = true;
         }
 
         /// <inheritdoc/>
@@ -316,7 +316,7 @@ namespace XRMultiplayer
 
         /// <summary>
         /// This function will request ownership of this object.
-        /// This will disable the <see cref="m_NetworkTransformClient"/> to allow for smooth interaction.
+        /// This will disable the <see cref="m_NetworkPhysicsTransformClient"/> to allow for smooth interaction.
         /// This will also set the <see cref="m_RequestingOwnership"/> flag to true.
         /// This will also start a Coroutine to check if ownership was not granted based on the current RTT to the server.
         /// </summary>
@@ -325,7 +325,7 @@ namespace XRMultiplayer
             if (IsOwner || OwnershipTransferBlocked()) return;
 
             m_RequestingOwnership = true;
-            m_NetworkTransformClient.enabled = false;
+            m_NetworkPhysicsTransformClient.enabled = false;
             if (!m_Rigidbody.isKinematic)
             {
                 m_Rigidbody.velocity = m_AverageVelocity;
@@ -375,7 +375,7 @@ namespace XRMultiplayer
                 CustomDebugLog.Singleton.LogNetworkManager($"Ownership Request Timed Out on Object {gameObject.name}");
             }
             m_RequestingOwnership = false;
-            m_NetworkTransformClient.enabled = true;
+            m_NetworkPhysicsTransformClient.enabled = true;
         }
     }
 }
