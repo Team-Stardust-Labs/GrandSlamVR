@@ -77,3 +77,6 @@ crashlytics-build.properties
 /Packages/*
 !/Packages/manifest.json
 !/Packages/packages-lock.json
+
+# test folder
+/test_BurstDebugInformation_DoNotShip/*
