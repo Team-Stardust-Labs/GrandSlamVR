@@ -4756,6 +4756,18 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 352496643
       objectReference: {fileID: 0}
+    - target: {fileID: 5340072935666267525, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
+      propertyPath: m_VelocityScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5340072935666267525, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
+      propertyPath: m_SmoothPosition
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5340072935666267525, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
+      propertyPath: m_VelocityDamping
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6326849211567710980, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12.36
