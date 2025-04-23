@@ -52,14 +52,15 @@ namespace XRMultiplayer
         {
             if (m_PauseVelocityCalculations) return;
 
+            /*
             Vector3 velocity = (transform.position - m_PrevPos) / Time.fixedDeltaTime;
 
             float smoothingFactor = 0.1f; // Higher = more responsive, lower = smoother
             m_SmoothVelocity = Vector3.Lerp(m_SmoothVelocity, velocity, smoothingFactor);
 
-            m_PrevPos = transform.position;
+            m_PrevPos = transform.position;*/
 
-            // LASSO SWINGING
+            
             if (m_CurrentInteractor != null && isInteracting)
             {
                 Vector3 currentInteractorPosition = m_CurrentInteractor.transform.position;
@@ -82,9 +83,9 @@ namespace XRMultiplayer
                 if (rayInteractor != null)
                 {
                     float baseDistance = LassoCurve(averageHandVelocity.magnitude);
-                    float newLassoDistance = Mathf.Clamp(baseDistance * 2f, 0.5f, 10.0f);
+                    float newLassoDistance = Mathf.Clamp(baseDistance * 2f, 1.0f, 10.0f);
 
-                    float smoothLassoDistance = Mathf.Lerp(rayInteractor.attachTransform.localPosition.z, newLassoDistance, Time.fixedDeltaTime * 2.0f);
+                    float smoothLassoDistance = Mathf.Lerp(rayInteractor.attachTransform.localPosition.z, newLassoDistance, Time.fixedDeltaTime * 0.75f);
 
                     // Set the attach point's local position along the Z-axis (forward)
                     rayInteractor.attachTransform.localPosition = new Vector3(0f, 0f, smoothLassoDistance);
@@ -222,16 +223,19 @@ namespace XRMultiplayer
             if (m_BaseInteractable.isSelected) return;
 
 
+            /*
             if (IsOwner && baseInteractable is XRGrabInteractable grab &&
                 (grab.movementType == XRBaseInteractable.MovementType.VelocityTracking || grab.throwOnDetach))
             {
                 m_Rigidbody.isKinematic = false;
-                float mag = Mathf.Clamp(m_SmoothVelocity.magnitude, 0.025f, 50.0f);
+                float mag = Mathf.Clamp(averageHandVelocity.magnitude, 0.025f, 50.0f);
                 float scaled = Mathf.Pow(mag, 1.5f);
                 scaled = Mathf.Min(scaled, 50.0f);
-                m_Rigidbody.velocity = m_SmoothVelocity.normalized * scaled;
+                m_Rigidbody.velocity = averageHandVelocity.normalized * scaled;
 
-            }
+            }*/
+
+            m_Rigidbody.velocity = Mathf.Clamp(averageHandVelocity.magnitude * 20.0f, 0.025f, 80.0f) * averageHandVelocity.normalized;
 
             // turn on gravity
             m_Rigidbody.useGravity = true;
