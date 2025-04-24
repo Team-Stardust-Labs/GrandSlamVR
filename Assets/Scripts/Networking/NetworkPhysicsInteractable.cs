@@ -1,5 +1,6 @@
 using System.Collections;
 using Unity.Netcode;
+using Unity.XR.PXR;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -195,6 +196,9 @@ namespace XRMultiplayer
         {
             base.OnSelectEnteredLocal(args);
 
+            // Play haptics on both controllers on Item grab
+            PXR_Input.SendHapticImpulse(PXR_Input.VibrateType.BothController, 0.5f, 250, 50);
+
             if (m_IgnoreSocketSelectedCallback && args.interactorObject is XRSocketInteractor)
                 return;
 
@@ -217,6 +221,11 @@ namespace XRMultiplayer
         public override void OnSelectExitedLocal(BaseInteractionEventArgs args)
         {
             base.OnSelectExitedLocal(args);
+
+            // Play haptics from audio file on both controllers on Item release
+            AudioClip hapticAsset = Resources.Load<AudioClip>("sfx_blowingthrow_hapticversion");
+            int sourceid = 0;
+            PXR_Input.SendHapticBuffer(PXR_Input.VibrateType.BothController, hapticAsset, PXR_Input.ChannelFlip.No, ref sourceid);
 
             m_CurrentInteractor = null;
 
