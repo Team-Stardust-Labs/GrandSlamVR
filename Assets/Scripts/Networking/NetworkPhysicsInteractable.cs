@@ -40,6 +40,9 @@ namespace XRMultiplayer
         // Flag to track thrown/respawned for respawn
         public static bool isThrown = false;
 
+        [Header("Audio Options")]
+        [SerializeField] private AudioSource m_ThrowLightAudioSource;
+        [SerializeField] private AudioSource m_ThrowStrongAudioSource;
 
         public override void Awake()
         {
@@ -234,26 +237,20 @@ namespace XRMultiplayer
 
             if (m_BaseInteractable.isSelected) return;
 
-
-            /*
-            if (IsOwner && baseInteractable is XRGrabInteractable grab &&
-                (grab.movementType == XRBaseInteractable.MovementType.VelocityTracking || grab.throwOnDetach))
-            {
-                m_Rigidbody.isKinematic = false;
-                float mag = Mathf.Clamp(averageHandVelocity.magnitude, 0.025f, 50.0f);
-                float scaled = Mathf.Pow(mag, 1.5f);
-                scaled = Mathf.Min(scaled, 50.0f);
-                m_Rigidbody.velocity = m_SmoothVelocity.normalized * scaled;
-            }
-                m_Rigidbody.velocity = averageHandVelocity.normalized * scaled;
-
-            }*/
-
+            // set rigidbody velocity
             m_Rigidbody.velocity = Mathf.Clamp(averageHandVelocity.magnitude * 20.0f, 0.025f, 80.0f) * averageHandVelocity.normalized;
 
             // turn on gravity
             m_Rigidbody.useGravity = true;
+
+            // throw
             isThrown = true;
+
+            // play audio
+            if (m_Rigidbody.velocity.magnitude > 75.0f)
+                m_ThrowStrongAudioSource.Play();
+            else
+            m_ThrowLightAudioSource.Play();
         }
 
         public override void OnGainedOwnership()

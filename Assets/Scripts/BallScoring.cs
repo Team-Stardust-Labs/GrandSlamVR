@@ -31,7 +31,7 @@ public class BallScoring : MonoBehaviour
             else
             {
 
-                if (transform.position.x > -28)
+                if (transform.position.x > -0.0f)
                 {
                     currentBallSpawn = ballSpawnPlayer1;
                 }
