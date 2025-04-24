@@ -36,6 +36,9 @@ namespace XRMultiplayer
         private Vector3 interactorPrevPosition;
         private Vector3 averageHandVelocity;
 
+        // Flag to track thrown/respawned for respawn
+        public static bool isThrown = false;
+
 
         public override void Awake()
         {
@@ -231,6 +234,8 @@ namespace XRMultiplayer
                 float mag = Mathf.Clamp(averageHandVelocity.magnitude, 0.025f, 50.0f);
                 float scaled = Mathf.Pow(mag, 1.5f);
                 scaled = Mathf.Min(scaled, 50.0f);
+                m_Rigidbody.velocity = m_SmoothVelocity.normalized * scaled;
+            }
                 m_Rigidbody.velocity = averageHandVelocity.normalized * scaled;
 
             }*/
@@ -239,6 +244,7 @@ namespace XRMultiplayer
 
             // turn on gravity
             m_Rigidbody.useGravity = true;
+            isThrown = true;
         }
 
         public override void OnGainedOwnership()

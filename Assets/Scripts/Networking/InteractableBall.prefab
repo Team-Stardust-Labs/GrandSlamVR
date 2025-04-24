@@ -18,9 +18,10 @@ GameObject:
   - component: {fileID: 436442802275359298}
   - component: {fileID: 1087426354179645112}
   - component: {fileID: 4719128556022499064}
+  - component: {fileID: 1547722712210861398}
   m_Layer: 0
   m_Name: InteractableBall
-  m_TagString: Untagged
+  m_TagString: Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -430,3 +431,17 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1547722712210861398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 772722369750487238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7ea18c5abb57ae4d8c74e0446184389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ballSpawnPlayer1: {fileID: 0}
+  ballSpawnPlayer2: {fileID: 0}
