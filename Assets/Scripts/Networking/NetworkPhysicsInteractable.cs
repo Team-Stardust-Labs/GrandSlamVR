@@ -62,15 +62,6 @@ namespace XRMultiplayer
         void FixedUpdate()
         {
             if (m_PauseVelocityCalculations) return;
-
-            /*
-            Vector3 velocity = (transform.position - m_PrevPos) / Time.fixedDeltaTime;
-
-            float smoothingFactor = 0.1f; // Higher = more responsive, lower = smoother
-            m_SmoothVelocity = Vector3.Lerp(m_SmoothVelocity, velocity, smoothingFactor);
-
-            m_PrevPos = transform.position;*/
-
             
             if (m_CurrentInteractor != null && isInteracting)
             {

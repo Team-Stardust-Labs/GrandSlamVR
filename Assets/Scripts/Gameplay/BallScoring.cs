@@ -37,13 +37,15 @@ public class BallScoring : MonoBehaviour
         // Update score 
         if (transform.position.x > 0.0f)
         {
-            // score for player2
-            currentBallSpawn = ballSpawnPlayer2;
+            // score for player1
+            currentBallSpawn = ballSpawnPlayer1;
+            ScoreManager.Singleton.AwardPointToPlayer1();
         }
         else
         {
-            // score for player1
-            currentBallSpawn = ballSpawnPlayer1;
+            // score for player2
+            currentBallSpawn = ballSpawnPlayer2;
+            ScoreManager.Singleton.AwardPointToPlayer2();
         }
     }
 
