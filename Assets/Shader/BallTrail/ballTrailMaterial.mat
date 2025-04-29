@@ -44,10 +44,10 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
-    - _DissolverScale: 35
+    - _DissolverScale: 50
     m_Colors:
-    - _Color_1: {r: 15.616002, g: 5.985716, b: 1.6351831, a: 0}
+    - _Color_1: {r: 6.643877, g: 7.808001, b: 0.81759155, a: 0}
     - _Color_2: {r: 2.4002733, g: 0.89743984, b: 0.23417293, a: 0}
     - _DissolverSpeed: {r: -0.5, g: 0, b: 0, a: 0}
-    - _MainTextureSpeed: {r: -0.35, g: 0, b: 0, a: 0}
+    - _MainTextureSpeed: {r: -5, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

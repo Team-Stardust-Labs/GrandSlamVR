@@ -2,6 +2,23 @@ using UnityEngine;
 using Unity.Netcode;
 using TMPro; // Erforderlich, wenn du TextMeshPro f�r deine UI verwendest
 
+
+/*
+
+    Score Manager Overview
+
+    - keeps track of the scores of both players and restarts the game if one player scores enough points
+    - uses callbacks to update the UI when the scores change and updates the local UI immediately
+    - uses a singleton pattern to allow easy access to the ScoreManager from other scripts
+
+    Networking:
+    - uses NetworkVariables to synchronize the scores between server and clients
+    - only the server can change the scores
+    - everyone can call the PointToPlayer1Request() and PointToPlayer2Request() methods to award points to the players
+
+*/
+
+
 // Dieses Skript geh�rt auf ein GameObject, das immer in der Szene ist
 // und �ber eine NetworkObject-Komponente verf�gt (z.B. der NetworkManager selbst).
 [RequireComponent(typeof(NetworkObject))]
@@ -13,17 +30,20 @@ public class ScoreManager : NetworkBehaviour
     [Tooltip("Das Text-Element f�r den Punktestand von Spieler 2")]
     public TMP_Text[] scoreTextsPlayer2; // Weise dies im Inspector zu!
 
+    public AudioSource m_scoreSound;
+    public AudioSource m_winSound;
+
     // NetworkVariables synchronisieren den Punktestand. Nur der Server darf schreiben.
     public NetworkVariable<int> Player1Score = new NetworkVariable<int>(
         value: 0, // Startwert
         readPerm: NetworkVariableReadPermission.Everyone, // Jeder darf lesen
-        writePerm: NetworkVariableWritePermission.Owner // Der Owner darf schreiben
+        writePerm: NetworkVariableWritePermission.Server // Der Owner darf schreiben
     );
 
     public NetworkVariable<int> Player2Score = new NetworkVariable<int>(
         value: 0,
         readPerm: NetworkVariableReadPermission.Everyone,
-        writePerm: NetworkVariableWritePermission.Owner
+        writePerm: NetworkVariableWritePermission.Server
     );
 
     // Einfaches Singleton für leichten Zugriff (haupts�chlich f�r den Server sp�ter)
@@ -111,14 +131,22 @@ public class ScoreManager : NetworkBehaviour
                 Debug.LogWarning($"Versuch, Score UI zu aktualisieren, aber Textfeld ist nicht zugewiesen f�r Score: {score}");
             }
         }
+
     }
 
+    
+    
+    [Rpc(SendTo.Server)]
+    private void ClientPointToPlayer1Rpc() {
+        ServerPointToPlayer1();
+    }
 
-    // --- Methoden zur Score-�nderung (Platzhalter - Werden sp�ter vom Server aufgerufen) ---
-    // Diese Methoden M�SSEN sp�ter aus einem Kontext aufgerufen werden, der NUR auf dem SERVER/HOST l�uft!
-
-    public void AwardPointToPlayer1()
+    private void ServerPointToPlayer1()
     {
+
+        if (!IsServer) {
+            return;
+        }
 
         // Punkt f�r Spieler 1 hinzuf�gen
         Player1Score.Value++;
@@ -130,14 +158,32 @@ public class ScoreManager : NetworkBehaviour
         if (Player1Score.Value >= 5) // Oft pr�ft man >=, falls durch schnelle Ereignisse der Wert 5 �bersprungen wird
         {
             // Punkte-Limit erreicht (oder �berschritten), Score zur�cksetzen
-            ResetScores();
+            ServerResetScores();
             // Optionale Log-Meldung, wenn der Score zur�ckgesetzt wird
             CustomDebugLog.Singleton.LogNetworkManager("SERVER: Spieler 1 hat 5 Punkte erreicht. Score wird zur�ckgesetzt.");
+        
+            // score sound
+            m_scoreSound.Play();
+        }
+
+        else {
+            // win sound
+            m_winSound.Play();
         }
 
     }
-    public void AwardPointToPlayer2()
+
+    [Rpc(SendTo.Server)]
+    private void ClientPointToPlayer2Rpc() {
+        ServerPointToPlayer2();
+    }
+
+    private void ServerPointToPlayer2()
     {
+
+        if (!IsServer) {
+            return;
+        }
 
         // Punkt f�r Spieler 1 hinzuf�gen
         Player2Score.Value++;
@@ -149,17 +195,66 @@ public class ScoreManager : NetworkBehaviour
         if (Player2Score.Value >= 5) // Oft pr�ft man >=, falls durch schnelle Ereignisse der Wert 5 �bersprungen wird
         {
             // Punkte-Limit erreicht (oder �berschritten), Score zur�cksetzen
-            ResetScores();
+            ServerResetScores();
             // Optionale Log-Meldung, wenn der Score zur�ckgesetzt wird
             CustomDebugLog.Singleton.LogNetworkManager("SERVER: Spieler 1 hat 5 Punkte erreicht. Score wird zur�ckgesetzt.");
+            
+            // win sound
+            playWinSoundRpc();
         }
 
+        else {
+            // score sound
+            playScoreSoundRpc();
+        }
 
     }
-    public void ResetScores()
+
+    [Rpc(SendTo.Everyone)]
+    private void playScoreSoundRpc()
     {
+        m_scoreSound.Play();
+
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void playWinSoundRpc()
+    {
+        m_winSound.Play();
+    }
+
+
+    private void ServerResetScores()
+    {
+        if (!IsServer) {
+            return;
+        }
+
         Player1Score.Value = 0;
         Player2Score.Value = 0;
         CustomDebugLog.Singleton.LogNetworkManager("SERVER: Scores zur�ckgesetzt.");
     }
+
+
+    // call this function to award a point to player 1
+    public void PointToPlayer1Request() {
+        if (IsServer) {
+            ServerPointToPlayer1();
+            return;
+        }
+
+        ClientPointToPlayer1Rpc();
+    }
+
+    // call this function to award a point to player 2
+    public void PointToPlayer2Request() {
+        if (IsServer) {
+            ServerPointToPlayer2();
+            return;
+        }
+
+        ClientPointToPlayer2Rpc();
+    }
+
+
 }

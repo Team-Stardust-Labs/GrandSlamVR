@@ -190,6 +190,9 @@ namespace XRMultiplayer
         {
             base.OnSelectEnteredLocal(args);
 
+            // reset thrown
+            isThrown = false;
+
             // Reset Bounces on Ball Scoring
             m_ball_scoring.ResetBounces();
 

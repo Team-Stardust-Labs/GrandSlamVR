@@ -49,5 +49,5 @@ Material:
     - _Color_1: {r: 5.5908804, g: 0.16228345, b: 0, a: 0}
     - _Color_2: {r: 4.867145, g: 2.266639, b: 0.53513104, a: 0}
     - _DissolverSpeed: {r: -0.5, g: 0, b: 0, a: 0}
-    - _MainTextureSpeed: {r: -0.35, g: 0, b: 0, a: 0}
+    - _MainTextureSpeed: {r: -2, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

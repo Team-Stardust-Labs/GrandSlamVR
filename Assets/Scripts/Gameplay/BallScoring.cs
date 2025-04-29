@@ -39,13 +39,13 @@ public class BallScoring : MonoBehaviour
         {
             // score for player1
             currentBallSpawn = ballSpawnPlayer1;
-            ScoreManager.Singleton.AwardPointToPlayer1();
+            ScoreManager.Singleton.PointToPlayer1Request();
         }
         else
         {
             // score for player2
             currentBallSpawn = ballSpawnPlayer2;
-            ScoreManager.Singleton.AwardPointToPlayer2();
+            ScoreManager.Singleton.PointToPlayer2Request();
         }
     }
 
@@ -59,14 +59,25 @@ public class BallScoring : MonoBehaviour
             currentBallSpawn.position = new Vector3(0, 5.0f, 0);
         }
 
-        m_rigidbody.velocity = Vector3.zero;
-        m_rigidbody.angularVelocity = Vector3.zero;
-        m_rigidbody.MovePosition(currentBallSpawn.position);
-        m_networkPhysicsInteractable.isThrown = false;
+        // only move the object if we are the owner
+        if (m_networkPhysicsInteractable.IsOwner) {
+            m_rigidbody.velocity = Vector3.zero;
+            m_rigidbody.angularVelocity = Vector3.zero;
+            m_rigidbody.MovePosition(currentBallSpawn.position);
+            m_networkPhysicsInteractable.isThrown = false;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+
+        // If ball is in hand of player or we arent the owner, do nothing
+        if (m_rigidbody.isKinematic || !m_networkPhysicsInteractable.IsOwner)
+        {
+            return;
+        }
+
+
         // Regular bouncing and scoring
         if (collision.gameObject.CompareTag("Court") && m_networkPhysicsInteractable.isThrown == true)
         {
@@ -80,7 +91,7 @@ public class BallScoring : MonoBehaviour
         }
 
         // Reset ball if ball gets stale without a bounce
-        if (m_networkPhysicsInteractable.isThrown && m_rigidbody.velocity.magnitude < 0.1f)
+        if (m_networkPhysicsInteractable.isThrown == true && m_rigidbody.velocity.magnitude < 0.1f)
         {
             // Free retry for the same player that had the ball
             RespawnBall();
