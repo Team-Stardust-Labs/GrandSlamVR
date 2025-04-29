@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.XR.PXR;
 using UnityEditor;
@@ -48,9 +49,7 @@ namespace XRMultiplayer
         // Trail
         [Header("Trail Options")]
         [SerializeField] private GameObject trailPrefab;
-
-        private TrailRenderer trail1;
-        private TrailRenderer trail2;
+        private List<TrailRenderer> m_TrailRenderers = new List<TrailRenderer>();
 
         public override void Awake()
         {
@@ -59,32 +58,36 @@ namespace XRMultiplayer
             m_Rigidbody = GetComponent<Rigidbody>();
             m_Collider = GetComponentInChildren<Collider>();
 
-
             interactorVelocityHistory = new Vector3[interactorFramesToCalculate];
 
-            GameObject trailInstance = Instantiate(trailPrefab, transform);
-        
-            TrailRenderer[] trails = trailInstance.GetComponentsInChildren<TrailRenderer>();
-            trail1 = trails[0];
-            trail2 = trails[1];
+            if (trailPrefab != null)
+            {
+                // Adding multiple trails to the object
+                for (int i = 0; i < 4; i++)
+                {
+                    GameObject trailInstance = Instantiate(trailPrefab, transform);
+                    trailInstance.transform.localRotation = Quaternion.Euler(0, i * 90, 0);
+                    m_TrailRenderers.AddRange(trailInstance.GetComponentsInChildren<TrailRenderer>());
+                }
 
-            trail1.emitting = false;
-            trail2.emitting = false;
+                foreach (var trail in m_TrailRenderers)
+                {
+                    if (trail != null)
+                    {
+                        trail.emitting = false;
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Trail Prefab is not assigned in the inspector.", this);
+            }
         }
 
         void FixedUpdate()
         {
             if (m_PauseVelocityCalculations) return;
 
-            /*
-            Vector3 velocity = (transform.position - m_PrevPos) / Time.fixedDeltaTime;
-
-            float smoothingFactor = 0.1f; // Higher = more responsive, lower = smoother
-            m_SmoothVelocity = Vector3.Lerp(m_SmoothVelocity, velocity, smoothingFactor);
-
-            m_PrevPos = transform.position;*/
-
-            
             if (m_CurrentInteractor != null && isInteracting)
             {
                 Vector3 currentInteractorPosition = m_CurrentInteractor.transform.position;
@@ -101,7 +104,6 @@ namespace XRMultiplayer
                     total += interactorVelocityHistory[i];
                 averageHandVelocity = total / interactorFramesToCalculate;
 
-
                 // Update the lasso length based on the velocity
                 XRRayInteractor rayInteractor = m_CurrentInteractor as XRRayInteractor;
                 if (rayInteractor != null)
@@ -115,15 +117,10 @@ namespace XRMultiplayer
                     rayInteractor.attachTransform.localPosition = new Vector3(0f, 0f, smoothLassoDistance);
                 }
             }
-            
-
-
-
         }
 
         float LassoCurve(float x)
         {
-            
             if (x < 8f)
             {
                 return x * 1.5f; // Linear growth
@@ -133,7 +130,6 @@ namespace XRMultiplayer
                 return 1f + Mathf.Log(x - 7f + 1f) * 0.5f; // Logarithmic rise after 8
             }
         }
-
 
         public override void OnNetworkSpawn()
         {
@@ -225,9 +221,9 @@ namespace XRMultiplayer
             // get the current interactor
             if (args.interactorObject is XRBaseInteractor interactor)
             {
-                 m_CurrentInteractor = interactor;
+                m_CurrentInteractor = interactor;
             }
-            
+
             // reset velocities
             m_Rigidbody.velocity = Vector3.zero;
             m_Rigidbody.angularVelocity = Vector3.zero;
@@ -264,17 +260,21 @@ namespace XRMultiplayer
             isThrown = true;
 
             // play audio and trail
-            if (m_Rigidbody.velocity.magnitude > 75.0f) {
+            bool strongThrow = m_Rigidbody.velocity.magnitude > 75.0f;
+            if (strongThrow) {
                 m_ThrowStrongAudioSource.Play();
-
-                trail1.emitting = true;
-                trail2.emitting = true;
             }
             else {
                 m_ThrowLightAudioSource.Play();
+            }
 
-                trail1.emitting = false;
-                trail2.emitting = false;
+            // Enable/disable trails based on throw strength
+            foreach (var trail in m_TrailRenderers)
+            {
+                if (trail != null)
+                {
+                    trail.emitting = strongThrow;
+                }
             }
         }
 
@@ -364,7 +364,5 @@ namespace XRMultiplayer
             interactorPrevPosition = m_CurrentInteractor != null ? m_CurrentInteractor.transform.position : Vector3.zero;
             averageHandVelocity = Vector3.zero;
         }
-
-
     }
 }
