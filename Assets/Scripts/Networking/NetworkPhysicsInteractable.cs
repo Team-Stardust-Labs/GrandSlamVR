@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.Netcode;
 using Unity.XR.PXR;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -44,6 +45,13 @@ namespace XRMultiplayer
         [SerializeField] private AudioSource m_ThrowLightAudioSource;
         [SerializeField] private AudioSource m_ThrowStrongAudioSource;
 
+        // Trail
+        [Header("Trail Options")]
+        [SerializeField] private GameObject trailPrefab;
+
+        private TrailRenderer trail1;
+        private TrailRenderer trail2;
+
         public override void Awake()
         {
             base.Awake();
@@ -51,8 +59,17 @@ namespace XRMultiplayer
             m_Rigidbody = GetComponent<Rigidbody>();
             m_Collider = GetComponentInChildren<Collider>();
 
+
             interactorVelocityHistory = new Vector3[interactorFramesToCalculate];
 
+            GameObject trailInstance = Instantiate(trailPrefab, transform);
+        
+            TrailRenderer[] trails = trailInstance.GetComponentsInChildren<TrailRenderer>();
+            trail1 = trails[0];
+            trail2 = trails[1];
+
+            trail1.emitting = false;
+            trail2.emitting = false;
         }
 
         void FixedUpdate()
@@ -246,11 +263,19 @@ namespace XRMultiplayer
             // throw
             isThrown = true;
 
-            // play audio
-            if (m_Rigidbody.velocity.magnitude > 75.0f)
+            // play audio and trail
+            if (m_Rigidbody.velocity.magnitude > 75.0f) {
                 m_ThrowStrongAudioSource.Play();
-            else
-            m_ThrowLightAudioSource.Play();
+
+                trail1.emitting = true;
+                trail2.emitting = true;
+            }
+            else {
+                m_ThrowLightAudioSource.Play();
+
+                trail1.emitting = false;
+                trail2.emitting = false;
+            }
         }
 
         public override void OnGainedOwnership()
