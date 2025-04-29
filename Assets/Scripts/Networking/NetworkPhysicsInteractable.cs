@@ -6,7 +6,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 namespace XRMultiplayer
 {
-    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(BallScoring))]
     public class NetworkPhysicsInteractable : NetworkBaseInteractable
     {
         [Header("Ownership Transfer Settings")]
@@ -30,6 +30,9 @@ namespace XRMultiplayer
         bool m_PauseVelocityCalculations = false;
         private XRBaseInteractor m_CurrentInteractor;
 
+        // ball scoring reference
+        private BallScoring m_ball_scoring;
+
         // Lasso
         [SerializeField] private int interactorFramesToCalculate = 8;
         private Vector3[] interactorVelocityHistory;
@@ -38,7 +41,7 @@ namespace XRMultiplayer
         private Vector3 averageHandVelocity;
 
         // Flag to track thrown/respawned for respawn
-        public static bool isThrown = false;
+        public bool isThrown = false;
 
         [Header("Audio Options")]
         [SerializeField] private AudioSource m_ThrowLightAudioSource;
@@ -50,6 +53,7 @@ namespace XRMultiplayer
 
             m_Rigidbody = GetComponent<Rigidbody>();
             m_Collider = GetComponentInChildren<Collider>();
+            m_ball_scoring = GetComponent<BallScoring>();
 
             interactorVelocityHistory = new Vector3[interactorFramesToCalculate];
 
@@ -98,10 +102,6 @@ namespace XRMultiplayer
                     rayInteractor.attachTransform.localPosition = new Vector3(0f, 0f, smoothLassoDistance);
                 }
             }
-            
-
-
-
         }
 
         float LassoCurve(float x)
@@ -198,6 +198,9 @@ namespace XRMultiplayer
         public override void OnSelectEnteredLocal(BaseInteractionEventArgs args)
         {
             base.OnSelectEnteredLocal(args);
+
+            // Reset Bounces on Ball Scoring
+            m_ball_scoring.ResetBounces();
 
             // Play haptics on both controllers on Item grab
             PXR_Input.SendHapticImpulse(PXR_Input.VibrateType.BothController, 0.5f, 250, 50);
