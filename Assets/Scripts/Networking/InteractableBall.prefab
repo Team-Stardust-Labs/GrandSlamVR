@@ -401,6 +401,7 @@ MonoBehaviour:
   isThrown: 0
   m_ThrowLightAudioSource: {fileID: 0}
   m_ThrowStrongAudioSource: {fileID: 0}
+  trailPrefab: {fileID: 0}
 --- !u!114 &1087426354179645112
 MonoBehaviour:
   m_ObjectHideFlags: 0

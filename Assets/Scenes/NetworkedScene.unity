@@ -2402,6 +2402,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 1560234380}
     m_Modifications:
     - target: {fileID: 436442802275359298, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
+      propertyPath: trailPrefab
+      value: 
+      objectReference: {fileID: 973418361220442747, guid: 0d5d3a94efd1e2f49a4b9aab5fcd848c, type: 3}
+    - target: {fileID: 436442802275359298, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
+      propertyPath: m_TrailRenderer
+      value: 
+      objectReference: {fileID: 973418361220442747, guid: 0d5d3a94efd1e2f49a4b9aab5fcd848c, type: 3}
+    - target: {fileID: 436442802275359298, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
       propertyPath: m_ThrowLightAudioSource
       value: 
       objectReference: {fileID: 1831751838}
@@ -2435,11 +2443,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6326849211567710980, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 5.077
       objectReference: {fileID: 0}
     - target: {fileID: 6326849211567710980, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1.742
       objectReference: {fileID: 0}
     - target: {fileID: 6326849211567710980, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3926,6 +3934,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1560234380}
     m_Modifications:
+    - target: {fileID: 436442802275359298, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
+      propertyPath: trailPrefab
+      value: 
+      objectReference: {fileID: 973418361220442747, guid: 0d5d3a94efd1e2f49a4b9aab5fcd848c, type: 3}
+    - target: {fileID: 436442802275359298, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
+      propertyPath: m_TrailRenderer
+      value: 
+      objectReference: {fileID: 973418361220442747, guid: 0d5d3a94efd1e2f49a4b9aab5fcd848c, type: 3}
     - target: {fileID: 436442802275359298, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
       propertyPath: m_ThrowLightAudioSource
       value: 
