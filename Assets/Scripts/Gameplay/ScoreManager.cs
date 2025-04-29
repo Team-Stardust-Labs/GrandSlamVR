@@ -162,13 +162,13 @@ public class ScoreManager : NetworkBehaviour
             // Optionale Log-Meldung, wenn der Score zur�ckgesetzt wird
             CustomDebugLog.Singleton.LogNetworkManager("SERVER: Spieler 1 hat 5 Punkte erreicht. Score wird zur�ckgesetzt.");
         
-            // score sound
-            m_scoreSound.Play();
+            // win sound
+            playWinSoundRpc();
         }
 
         else {
-            // win sound
-            m_winSound.Play();
+            // score sound
+            playScoreSoundRpc();
         }
 
     }

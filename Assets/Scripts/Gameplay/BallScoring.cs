@@ -65,6 +65,7 @@ public class BallScoring : MonoBehaviour
             m_rigidbody.angularVelocity = Vector3.zero;
             m_rigidbody.MovePosition(currentBallSpawn.position);
             m_networkPhysicsInteractable.isThrown = false;
+            m_networkPhysicsInteractable.deactivateTrailsRpc();
         }
     }
 
@@ -90,8 +91,8 @@ public class BallScoring : MonoBehaviour
             }
         }
 
-        // Reset ball if ball gets stale without a bounce
-        if (m_networkPhysicsInteractable.isThrown == true && m_rigidbody.velocity.magnitude < 0.1f)
+        // Reset ball if ball gets stale
+        if (m_networkPhysicsInteractable.isThrown == true && m_rigidbody.velocity.magnitude < 1.0f)
         {
             // Free retry for the same player that had the ball
             RespawnBall();

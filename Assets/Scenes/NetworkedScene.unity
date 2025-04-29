@@ -2402,14 +2402,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 1560234380}
     m_Modifications:
     - target: {fileID: 436442802275359298, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
-      propertyPath: trailPrefab
-      value: 
-      objectReference: {fileID: 973418361220442747, guid: 0d5d3a94efd1e2f49a4b9aab5fcd848c, type: 3}
-    - target: {fileID: 436442802275359298, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
-      propertyPath: m_TrailRenderer
-      value: 
-      objectReference: {fileID: 973418361220442747, guid: 0d5d3a94efd1e2f49a4b9aab5fcd848c, type: 3}
-    - target: {fileID: 436442802275359298, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
       propertyPath: m_ThrowLightAudioSource
       value: 
       objectReference: {fileID: 1831751838}
@@ -2432,10 +2424,6 @@ PrefabInstance:
     - target: {fileID: 3963246742299504657, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1019283677
-      objectReference: {fileID: 0}
-    - target: {fileID: 4719128556022499064, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
-      propertyPath: m_Radius
-      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 6326849211567710980, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3935,14 +3923,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 1560234380}
     m_Modifications:
     - target: {fileID: 436442802275359298, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
-      propertyPath: trailPrefab
-      value: 
-      objectReference: {fileID: 973418361220442747, guid: 0d5d3a94efd1e2f49a4b9aab5fcd848c, type: 3}
-    - target: {fileID: 436442802275359298, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
-      propertyPath: m_TrailRenderer
-      value: 
-      objectReference: {fileID: 973418361220442747, guid: 0d5d3a94efd1e2f49a4b9aab5fcd848c, type: 3}
-    - target: {fileID: 436442802275359298, guid: 5cef323ecb7814267a16da44fba7dc03, type: 3}
       propertyPath: m_ThrowLightAudioSource
       value: 
       objectReference: {fileID: 1831751838}
@@ -4271,7 +4251,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6843402085708270640}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: fa35a632849614c89b8f683b26c599e1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

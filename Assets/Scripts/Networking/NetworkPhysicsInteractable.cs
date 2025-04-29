@@ -74,17 +74,42 @@ namespace XRMultiplayer
                     m_TrailRenderers.AddRange(trailInstance.GetComponentsInChildren<TrailRenderer>());
                 }
 
-                foreach (var trail in m_TrailRenderers)
-                {
-                    if (trail != null)
-                    {
-                        trail.emitting = false;
-                    }
-                }
+                deactivateTrailsRpc();
             }
             else
             {
                 Debug.LogWarning("Trail Prefab is not assigned in the inspector.", this);
+            }
+        }
+
+        [Rpc(SendTo.Everyone)]
+        public void deactivateTrailsRpc()
+        {
+            foreach (var trail in m_TrailRenderers)
+            {
+                if (trail != null)
+                {
+                    trail.emitting = false;
+                }
+            }
+        }
+
+        [Rpc(SendTo.Everyone)]
+        public void triggerTrailsRpc(bool strongThrow)
+        {   
+            if (strongThrow) {
+                // Enable/disable trails based on throw strength
+                foreach (var trail in m_TrailRenderers)
+                {
+                    if (trail != null)
+                    {
+                        trail.emitting = true;
+                    }
+                } 
+            }
+            else {
+                // TODO HACKY MACKY
+                m_TrailRenderers[0].emitting = true;
             }
         }
 
@@ -228,6 +253,9 @@ namespace XRMultiplayer
             // reset thrown
             isThrown = false;
 
+            // reset trails on grab
+            deactivateTrailsRpc(); 
+
             // Reset Bounces on Ball Scoring
             m_ball_scoring.ResetBounces();
 
@@ -287,14 +315,7 @@ namespace XRMultiplayer
                 m_ThrowLightAudioSource.Play();
             }
 
-            // Enable/disable trails based on throw strength
-            foreach (var trail in m_TrailRenderers)
-            {
-                if (trail != null)
-                {
-                    trail.emitting = strongThrow;
-                }
-            }
+            triggerTrailsRpc(strongThrow);
         }
 
         public override void OnGainedOwnership()
