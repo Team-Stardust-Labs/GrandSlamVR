@@ -9,9 +9,9 @@ public class ScoreManager : NetworkBehaviour
 {
     [Header("Scoreboard UI Referenzen")]
     [Tooltip("Das Text-Element für den Punktestand von Spieler 1")]
-    public TMP_Text scoreTextPlayer1; // Weise dies im Inspector zu!
+    public TMP_Text[] scoreTextsPlayer1; // Weise dies im Inspector zu!
     [Tooltip("Das Text-Element für den Punktestand von Spieler 2")]
-    public TMP_Text scoreTextPlayer2; // Weise dies im Inspector zu!
+    public TMP_Text[] scoreTextsPlayer2; // Weise dies im Inspector zu!
 
     // NetworkVariables synchronisieren den Punktestand. Nur der Server darf schreiben.
     public NetworkVariable<int> Player1Score = new NetworkVariable<int>(
@@ -56,8 +56,8 @@ public class ScoreManager : NetworkBehaviour
 
         // WICHTIG: Die UI sofort beim Spawn aktualisieren,
         // damit auch spät beitretende Clients den aktuellen Stand sehen.
-        UpdateScoreUI(scoreTextPlayer1, Player1Score.Value);
-        UpdateScoreUI(scoreTextPlayer2, Player2Score.Value);
+        UpdateScoreUI(scoreTextsPlayer1, Player1Score.Value);
+        UpdateScoreUI(scoreTextsPlayer2, Player2Score.Value);
 
         Debug.Log("ScoreManager OnNetworkSpawn: Callbacks registriert und UI initialisiert.");
     }
@@ -84,30 +84,32 @@ public class ScoreManager : NetworkBehaviour
     private void OnScoreChangedP1(int previousValue, int newValue)
     {
         Debug.Log($"Score P1 geändert: {previousValue} -> {newValue}");
-        UpdateScoreUI(scoreTextPlayer1, newValue);
+        UpdateScoreUI(scoreTextsPlayer1, newValue);
     }
 
     // Diese Methode wird automatisch aufgerufen, wenn sich Player2Score.Value ändert
     private void OnScoreChangedP2(int previousValue, int newValue)
     {
         Debug.Log($"Score P2 geändert: {previousValue} -> {newValue}");
-        UpdateScoreUI(scoreTextPlayer2, newValue);
+        UpdateScoreUI(scoreTextsPlayer2, newValue);
     }
 
     // --- UI Aktualisierung ---
 
     // Aktualisiert das zugewiesene Text-Element
-    private void UpdateScoreUI(TMP_Text uiText, int score)
+    private void UpdateScoreUI(TMP_Text[] uiTexts, int score)
     {
-        if (uiText != null)
-        {
-            uiText.text = score.ToString();
-        }
-        else
-        {
-            // Nur eine Warnung, falls die UI nicht zugewiesen ist, damit das Spiel nicht abstürzt
-            Debug.LogWarning($"Versuch, Score UI zu aktualisieren, aber Textfeld ist nicht zugewiesen für Score: {score}");
-        }
+        foreach (TMP_Text uiText in uiTexts)
+        { if (uiText != null)
+            {
+                uiText.text = score.ToString();
+            }
+            else
+            {
+                // Nur eine Warnung, falls die UI nicht zugewiesen ist, damit das Spiel nicht abstürzt
+                Debug.LogWarning($"Versuch, Score UI zu aktualisieren, aber Textfeld ist nicht zugewiesen für Score: {score}");
+            }
+        } 
     }
 
 
@@ -117,20 +119,62 @@ public class ScoreManager : NetworkBehaviour
     [ContextMenu("DEBUG: Punkt für P1 geben (Nur Editor/Server)")] // Zum Testen im Editor
     public void AwardPointToPlayer1()
     {
-        if (!IsServer) return; // Sicherheitscheck: Nur Server darf dies tun
-        Player1Score.Value++;
-        Debug.Log($"SERVER: Punkt für P1 vergeben. Neuer Stand: {Player1Score.Value}");
-    }
+        // Sicherheitscheck: Nur Server darf dies tun.
+        // Da Player1Score wahrscheinlich eine NetworkVariable ist, muss die Änderung serverseitig erfolgen.
+        if (!IsServer)
+        {
+            return;
+        }
 
-    [ContextMenu("DEBUG: Punkt für P2 geben (Nur Editor/Server)")] // Zum Testen im Editor
+        // Punkt für Spieler 1 hinzufügen
+        Player1Score.Value++;
+
+        // Log, um den aktuellen Stand auf dem Server anzuzeigen (kann beibehalten werden)
+        Debug.Log($"SERVER: Punkt für P1 vergeben. Neuer Stand: {Player1Score.Value}");
+
+        // --- NEUE LOGIK STARTET HIER ---
+
+        // Überprüfen, ob Spieler 1 die erforderlichen 5 Punkte erreicht hat
+        if (Player1Score.Value >= 5) // Oft prüft man >=, falls durch schnelle Ereignisse der Wert 5 übersprungen wird
+        {
+            // Punkte-Limit erreicht (oder überschritten), Score zurücksetzen
+           ResetScores();
+            // Optionale Log-Meldung, wenn der Score zurückgesetzt wird
+            Debug.Log("SERVER: Spieler 1 hat 5 Punkte erreicht. Score wird zurückgesetzt.");
+        }
+
+        // --- NEUE LOGIK ENDET HIER ---
+
+    }
     public void AwardPointToPlayer2()
     {
-        if (!IsServer) return;
-        Player2Score.Value++;
-        Debug.Log($"SERVER: Punkt für P2 vergeben. Neuer Stand: {Player2Score.Value}");
-    }
+        // Sicherheitscheck: Nur Server darf dies tun.
+        // Da Player2Score wahrscheinlich eine NetworkVariable ist, muss die Änderung serverseitig erfolgen.
+        if (!IsServer)
+        {
+            return;
+        }
 
-    [ContextMenu("DEBUG: Scores zurücksetzen (Nur Editor/Server)")] // Zum Testen im Editor
+        // Punkt für Spieler 1 hinzufügen
+        Player2Score.Value++;
+
+        // Log, um den aktuellen Stand auf dem Server anzuzeigen (kann beibehalten werden)
+        Debug.Log($"SERVER: Punkt für P2 vergeben. Neuer Stand: {Player2Score.Value}");
+
+        // --- NEUE LOGIK STARTET HIER ---
+
+        // Überprüfen, ob Spieler 1 die erforderlichen 5 Punkte erreicht hat
+        if (Player2Score.Value >= 5) // Oft prüft man >=, falls durch schnelle Ereignisse der Wert 5 übersprungen wird
+        {
+            // Punkte-Limit erreicht (oder überschritten), Score zurücksetzen
+            ResetScores();
+            // Optionale Log-Meldung, wenn der Score zurückgesetzt wird
+            Debug.Log("SERVER: Spieler 1 hat 5 Punkte erreicht. Score wird zurückgesetzt.");
+        }
+
+        // --- NEUE LOGIK ENDET HIER ---
+
+    }
     public void ResetScores()
     {
         if (!IsServer) return;
