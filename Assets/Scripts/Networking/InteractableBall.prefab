@@ -337,7 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1166853418
+  GlobalObjectIdHash: 352496643
   InScenePlacedSourceGlobalObjectIdHash: 1712548735
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -397,8 +397,10 @@ MonoBehaviour:
   m_MinExchangeVelocityMagnitude: 0.025
   spawnLocked: 0
   interactorFramesToCalculate: 8
+  isThrown: 0
   m_ThrowLightAudioSource: {fileID: 0}
   m_ThrowStrongAudioSource: {fileID: 0}
+  trailPrefab: {fileID: 973418361220442747, guid: 0d5d3a94efd1e2f49a4b9aab5fcd848c, type: 3}
 --- !u!114 &1087426354179645112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,7 +433,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.5
+  m_Radius: 2.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1547722712210861398
 MonoBehaviour:
@@ -445,5 +447,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7ea18c5abb57ae4d8c74e0446184389, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxBounces: 1
   ballSpawnPlayer1: {fileID: 0}
   ballSpawnPlayer2: {fileID: 0}

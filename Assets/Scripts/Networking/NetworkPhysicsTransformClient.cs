@@ -54,7 +54,7 @@ public class NetworkPhysicsTransformClient : NetworkBehaviour
             // Interpolate using Rigidbody physics
             if (m_Rigidbody != null)
             {
-                Vector3 newPos = Vector3.Lerp(m_Rigidbody.position, networkPosition.Value, Time.fixedDeltaTime * positionLerpSpeed);
+                Vector3 newPos = Vector3.Lerp(m_Rigidbody.position, networkPosition.Value, Mathf.Clamp(Time.fixedDeltaTime * positionLerpSpeed, 0.0f, 1.0f));
                 m_Rigidbody.MovePosition(newPos);
             }
         }
