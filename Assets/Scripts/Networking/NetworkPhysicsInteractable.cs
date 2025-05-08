@@ -30,7 +30,7 @@ namespace XRMultiplayer
         Vector3 m_PrevPos;
         Vector3 m_SmoothVelocity;
         bool m_PauseVelocityCalculations = false;
-        private XRBaseInteractor m_CurrentInteractor;
+        private UnityEngine.XR.Interaction.Toolkit.Interactors.XRBaseInteractor m_CurrentInteractor;
 
         // ball scoring reference
         private BallScoring m_ball_scoring;
@@ -143,7 +143,7 @@ namespace XRMultiplayer
                 averageHandVelocity = total / interactorFramesToCalculate;
 
                 // Update the lasso length based on the velocity
-                XRRayInteractor rayInteractor = m_CurrentInteractor as XRRayInteractor;
+                UnityEngine.XR.Interaction.Toolkit.Interactors.NearFarInteractor rayInteractor = m_CurrentInteractor as UnityEngine.XR.Interaction.Toolkit.Interactors.NearFarInteractor;
                 if (rayInteractor != null)
                 {
                     float baseDistance = LassoCurve(averageHandVelocity.magnitude);
@@ -224,7 +224,7 @@ namespace XRMultiplayer
 
             if (!wasKinematic)
             {
-                m_Rigidbody.velocity = Vector3.zero;
+                m_Rigidbody.linearVelocity = Vector3.zero;
                 m_Rigidbody.angularVelocity = Vector3.zero;
             }
 
@@ -262,17 +262,17 @@ namespace XRMultiplayer
             // Play haptics on both controllers on Item grab
             PXR_Input.SendHapticImpulse(PXR_Input.VibrateType.BothController, 0.5f, 250, 50);
 
-            if (m_IgnoreSocketSelectedCallback && args.interactorObject is XRSocketInteractor)
+            if (m_IgnoreSocketSelectedCallback && args.interactorObject is UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor)
                 return;
 
             // get the current interactor
-            if (args.interactorObject is XRBaseInteractor interactor)
+            if (args.interactorObject is UnityEngine.XR.Interaction.Toolkit.Interactors.NearFarInteractor interactor)
             {
                 m_CurrentInteractor = interactor;
             }
 
             // reset velocities
-            m_Rigidbody.velocity = Vector3.zero;
+            m_Rigidbody.linearVelocity = Vector3.zero;
             m_Rigidbody.angularVelocity = Vector3.zero;
 
             // turn off gravity
@@ -292,13 +292,13 @@ namespace XRMultiplayer
 
             m_CurrentInteractor = null;
 
-            if (m_IgnoreSocketSelectedCallback && args.interactorObject is XRSocketInteractor)
+            if (m_IgnoreSocketSelectedCallback && args.interactorObject is UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor)
                 return;
 
             if (m_BaseInteractable.isSelected) return;
 
             // set rigidbody velocity
-            m_Rigidbody.velocity = Mathf.Clamp(averageHandVelocity.magnitude * 20.0f, 0.025f, 80.0f) * averageHandVelocity.normalized;
+            m_Rigidbody.linearVelocity = Mathf.Clamp(averageHandVelocity.magnitude * 20.0f, 0.025f, 80.0f) * averageHandVelocity.normalized;
 
             // turn on gravity
             m_Rigidbody.useGravity = true;
@@ -307,7 +307,7 @@ namespace XRMultiplayer
             isThrown = true;
 
             // play audio and trail
-            bool strongThrow = m_Rigidbody.velocity.magnitude > 75.0f;
+            bool strongThrow = m_Rigidbody.linearVelocity.magnitude > 75.0f;
             if (strongThrow) {
                 m_ThrowStrongAudioSource.Play();
             }
@@ -346,8 +346,8 @@ namespace XRMultiplayer
 
         bool IsMovingFaster(Rigidbody other)
         {
-            return m_Rigidbody.velocity.magnitude > m_MinExchangeVelocityMagnitude &&
-                   m_Rigidbody.velocity.magnitude > other.velocity.magnitude;
+            return m_Rigidbody.linearVelocity.magnitude > m_MinExchangeVelocityMagnitude &&
+                   m_Rigidbody.linearVelocity.magnitude > other.linearVelocity.magnitude;
         }
 
         public bool OwnershipTransferBlocked()

@@ -33,18 +33,35 @@ public class BallScoring : MonoBehaviour
         bounces = 0;
     }   
 
-    private void UpdateScore() {
+    void FixedUpdate() {
+        // Reset ball if ball gets stale / dosent move or is out of bounds
+        if (m_rigidbody.linearVelocity.magnitude < 1.0 && m_networkPhysicsInteractable.isThrown == true)
+        {
+            // Free retry for the same player that had the ball
+            RespawnBall();
+        }
+    }
+
+    private void UpdateScore(bool skipScoring = false) {
         // Update score 
         if (transform.position.x > 0.0f)
         {
             // score for player1
             currentBallSpawn = ballSpawnPlayer1;
+
+            if (skipScoring) {
+                return;
+            }
             ScoreManager.Singleton.PointToPlayer1Request();
         }
         else
         {
             // score for player2
             currentBallSpawn = ballSpawnPlayer2;
+
+            if (skipScoring) {
+                return;
+            }
             ScoreManager.Singleton.PointToPlayer2Request();
         }
     }
@@ -53,15 +70,25 @@ public class BallScoring : MonoBehaviour
 
         ResetBounces();
 
-        // Fallback spawnpoint at 0,0
-        if (ballSpawnPlayer1 == null || ballSpawnPlayer2 == null)
+        // Fallback spawnpoints
+        if (ballSpawnPlayer2 == null)
+        {
+            currentBallSpawn.position = ballSpawnPlayer1.position;
+        }
+
+        if (ballSpawnPlayer1 == null)
         {
             currentBallSpawn.position = new Vector3(0, 5.0f, 0);
         }
 
+        if (currentBallSpawn == null)
+        {
+            currentBallSpawn.position = ballSpawnPlayer1.position;
+        }
+
         // only move the object if we are the owner
         if (m_networkPhysicsInteractable.IsOwner) {
-            m_rigidbody.velocity = Vector3.zero;
+            m_rigidbody.linearVelocity = Vector3.zero;
             m_rigidbody.angularVelocity = Vector3.zero;
             m_rigidbody.MovePosition(currentBallSpawn.position);
             m_networkPhysicsInteractable.isThrown = false;
@@ -89,13 +116,6 @@ public class BallScoring : MonoBehaviour
                 UpdateScore();
                 RespawnBall();                
             }
-        }
-
-        // Reset ball if ball gets stale
-        if (m_networkPhysicsInteractable.isThrown == true && m_rigidbody.velocity.magnitude < 1.0f)
-        {
-            // Free retry for the same player that had the ball
-            RespawnBall();
         }
     }
 }
