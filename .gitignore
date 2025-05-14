@@ -35,6 +35,9 @@
 # Visual Studio Code directory
 .vscode/
 
+# Rider directory
+.idea/
+
 # Gradle cache directory
 .gradle/
 
@@ -88,3 +91,4 @@ crashlytics-build.properties
 
 # test folder
 /test_BurstDebugInformation_DoNotShip/*
+Packages/packages-lock.json
