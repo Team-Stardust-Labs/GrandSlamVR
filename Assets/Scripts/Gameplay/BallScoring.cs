@@ -34,20 +34,21 @@ public class BallScoring : MonoBehaviour
     }   
 
     void FixedUpdate() {
+        /* BUGGY
         // Reset ball if ball gets stale / dosent move or is out of bounds
         if (m_rigidbody.linearVelocity.magnitude < 1.0 && m_networkPhysicsInteractable.isThrown == true)
         {
             // Free retry for the same player that had the ball
             RespawnBall();
-        }
+        }*/
     }
 
     private void UpdateScore(bool skipScoring = false) {
         // Update score 
         if (transform.position.x > 0.0f)
         {
-            // score for player1
-            currentBallSpawn = ballSpawnPlayer1;
+            // score for player1, but give ball to player2
+            currentBallSpawn = ballSpawnPlayer2;
 
             if (skipScoring) {
                 return;
@@ -56,8 +57,8 @@ public class BallScoring : MonoBehaviour
         }
         else
         {
-            // score for player2
-            currentBallSpawn = ballSpawnPlayer2;
+            // score for player2, but give ball to player1
+            currentBallSpawn = ballSpawnPlayer1;
 
             if (skipScoring) {
                 return;
@@ -116,6 +117,13 @@ public class BallScoring : MonoBehaviour
                 UpdateScore();
                 RespawnBall();                
             }
+        }
+
+        
+        if (collision.gameObject.CompareTag("Respawn"))
+        {
+            UpdateScore(true); // skip scoring
+            RespawnBall();   
         }
     }
 }

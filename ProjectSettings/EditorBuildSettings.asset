@@ -8,9 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/FinalMapScene.unity
     guid: 8dde85d1b0cb34b5aa447453ab4402ea
-  - enabled: 0
-    path: Assets/Scenes/NetworkedScene.unity
-    guid: 94984c6c163894e21ba148959cc2e3c5
   m_configObjects:
     Unity.XR.PXR.Settings: {fileID: 11400000, guid: d69d66bedbdd19c4fa950eccc0349fb8, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: d36ace20a65d1df4d9fdc68a4eb88f52, type: 2}
