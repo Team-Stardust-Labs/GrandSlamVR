@@ -120,7 +120,7 @@ public class BallScoring : MonoBehaviour
         }
 
         
-        if (collision.gameObject.CompareTag("Respawn"))
+        if (collision.gameObject.CompareTag("BoundingBox"))
         {
             UpdateScore(true); // skip scoring
             RespawnBall();   
