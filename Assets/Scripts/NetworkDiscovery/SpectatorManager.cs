@@ -13,6 +13,7 @@ public class SpectatorManager : MonoBehaviour
 
     void Awake()
     {
+        Debug.Log("SpectatorManager: Awake() aufgerufen.");
         // Hole die Referenz zum LanConnector-Skript auf dem zugewiesenen joinDiscoveryObject
         if (joinDiscoveryObject != null)
         {
@@ -20,6 +21,10 @@ public class SpectatorManager : MonoBehaviour
             if (lanConnector == null)
             {
                 Debug.LogError("SpectatorManager: ConnectToDiscoveredHost Skript nicht auf joinDiscoveryObject gefunden!");
+            }
+            else
+            {
+                Debug.Log("SpectatorManager: LanConnector erfolgreich gefunden.");
             }
         }
         else
@@ -30,18 +35,19 @@ public class SpectatorManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("SpectatorManager: Start() aufgerufen.");
         // Lese den aktuellen RunMode, der vom PlatformModeInitializer via StartupScript-Konstanten gesetzt wurde
         string currentRunMode = PlayerPrefs.GetString(StartupScript.RunModePlayerPrefKey);
-        Debug.Log($"SpectatorManager: Aktueller RunMode aus PlayerPrefs: {currentRunMode}");
+        Debug.Log($"SpectatorManager: Aktueller RunMode aus PlayerPrefs: '{currentRunMode}'");
 
         if (currentRunMode == StartupScript.SpectatorModeValue)
         {
-            // CustomDebugLog.Singleton.Log("SpectatorManager: Aktiv im Spectator-Modus.");
+            Debug.Log("SpectatorManager: Aktiv im Spectator-Modus.");
             InitializeSpectatorMode();
         }
         else
         {
-            // CustomDebugLog.Singleton.Log("SpectatorManager: Nicht im Spectator-Modus, deaktiviere dieses Skript/GameObject.");
+            Debug.Log("SpectatorManager: Nicht im Spectator-Modus, deaktiviere dieses Skript/GameObject.");
             // Stelle sicher, dass die Spectator-Kamera aus ist, falls sie versehentlich aktiv war
             if (spectatorCameraObject != null)
             {
@@ -54,11 +60,12 @@ public class SpectatorManager : MonoBehaviour
 
     void InitializeSpectatorMode()
     {
+        Debug.Log("SpectatorManager: InitializeSpectatorMode() aufgerufen.");
         // Aktiviere die Spectator-Kamera
         if (spectatorCameraObject != null)
         {
             spectatorCameraObject.SetActive(true);
-            // CustomDebugLog.Singleton.Log("SpectatorManager: Spectator-Kamera aktiviert.");
+            Debug.Log("SpectatorManager: Spectator-Kamera aktiviert.");
         }
         else
         {
@@ -69,7 +76,7 @@ public class SpectatorManager : MonoBehaviour
         if (NetworkManager.Singleton != null && NetworkManager.Singleton.NetworkConfig != null)
         {
             NetworkManager.Singleton.NetworkConfig.PlayerPrefab = null;
-            // CustomDebugLog.Singleton.Log("SpectatorManager: PlayerPrefab für Spectator im NetworkManager auf null gesetzt.");
+            Debug.Log("SpectatorManager: PlayerPrefab für Spectator im NetworkManager auf null gesetzt.");
         }
         else
         {
@@ -79,14 +86,17 @@ public class SpectatorManager : MonoBehaviour
         // Starte den automatischen LAN-Discovery und Join-Prozess
         if (joinDiscoveryObject != null && lanConnector != null)
         {
-            if (!NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsServer) // Nur starten, wenn nicht schon verbunden
+            // Nur starten, wenn nicht schon verbunden oder Server (sollte für reinen Client nicht der Fall sein, aber sicher ist sicher)
+            if (NetworkManager.Singleton == null || (!NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsServer))
             {
                 joinDiscoveryObject.SetActive(true); // Aktiviere das Objekt, das LanDiscoveryClient startet
                 InvokeRepeating(nameof(AttemptToJoinDiscoveredHost), 2.0f, 2.0f); // Versuche alle 2 Sek. zu verbinden
                 isActiveAndAttemptingJoin = true;
-                // CustomDebugLog.Singleton.Log("SpectatorManager: Automatischer Join als Spectator gestartet (InvokeRepeating).");
+                Debug.Log("SpectatorManager: Automatischer Join als Spectator gestartet (InvokeRepeating).");
             }
-            // else CustomDebugLog.Singleton.Log("SpectatorManager: Netzwerk ist bereits aktiv, starte keinen Join-Versuch.");
+            else {
+                Debug.Log("SpectatorManager: Netzwerk ist bereits aktiv oder NetworkManager nicht initialisiert, starte keinen Join-Versuch via InvokeRepeating.");
+            }
         }
         else
         {
@@ -96,30 +106,32 @@ public class SpectatorManager : MonoBehaviour
 
     void AttemptToJoinDiscoveredHost()
     {
-        if (!isActiveAndAttemptingJoin) return; // Stoppe, wenn wir nicht mehr suchen sollen (z.B. nach Erfolg)
-
-        // Prüfe, ob der LanConnector (ConnectToDiscoveredHost) eine Adresse gefunden hat
-        if (lanConnector != null && !string.IsNullOrEmpty(lanConnector.discovery.foundAddress))
+        if (!isActiveAndAttemptingJoin)
         {
-            // CustomDebugLog.Singleton.Log($"SpectatorManager: Host gefunden unter {lanConnector.discovery.foundAddress}. Versuche Verbindung...");
-
-            // Rufe die TryConnect-Methode auf dem LanConnector auf.
-            // Diese Methode sollte NetworkManager.Singleton.StartClient() mit der gefundenen Adresse aufrufen.
-            lanConnector.TryConnect();
-
-            // Stoppe weitere Join-Versuche, nachdem der erste Versuch unternommen wurde.
-            // ConnectToDiscoveredHost.TryConnect() gibt einen bool zurück, den wir hier nicht direkt abfragen,
-            // aber wir gehen davon aus, dass der Versuch gestartet wird.
-            // Der NetworkManager wird dann Events für erfolgreiche/fehlgeschlagene Verbindung auslösen.
-            CancelInvoke(nameof(AttemptToJoinDiscoveredHost));
-            isActiveAndAttemptingJoin = false; // Markiere, dass wir den Join-Prozess abgeschlossen haben (Versuch gestartet)
-            // CustomDebugLog.Singleton.Log("SpectatorManager: InvokeRepeating für AttemptToJoinDiscoveredHost gestoppt nach Verbindungsversuch.");
+            // Debug.Log("SpectatorManager: AttemptToJoinDiscoveredHost() - isActiveAndAttemptingJoin ist false, breche ab.");
+            return; // Stoppe, wenn wir nicht mehr suchen sollen (z.B. nach Erfolg oder Fehler)
         }
-        // else CustomDebugLog.Singleton.Log("SpectatorManager: Noch kein Host über LAN Discovery gefunden. Suche weiter...");
+
+        // Debug.Log("SpectatorManager: AttemptToJoinDiscoveredHost() prüft auf gefundenen Host...");
+        if (lanConnector != null && lanConnector.discovery != null && !string.IsNullOrEmpty(lanConnector.discovery.foundAddress))
+        {
+            Debug.Log($"SpectatorManager: Host gefunden unter '{lanConnector.discovery.foundAddress}'. Versuche Verbindung...");
+
+            lanConnector.TryConnect(); // Diese Methode sollte NetworkManager.Singleton.StartClient() aufrufen
+
+            CancelInvoke(nameof(AttemptToJoinDiscoveredHost));
+            isActiveAndAttemptingJoin = false;
+            Debug.Log("SpectatorManager: InvokeRepeating für AttemptToJoinDiscoveredHost gestoppt nach Verbindungsversuch.");
+        }
+        else
+        {
+             Debug.Log("SpectatorManager: Noch kein Host über LAN Discovery gefunden. Suche weiter...");
+        }
     }
 
     void OnDestroy()
     {
+        Debug.Log("SpectatorManager: OnDestroy() aufgerufen. Stoppe InvokeRepeating.");
         // Stelle sicher, dass InvokeRepeating gestoppt wird, wenn das Objekt zerstört wird
         CancelInvoke(nameof(AttemptToJoinDiscoveredHost));
     }
