@@ -17,7 +17,7 @@ public class BallScoring : MonoBehaviour
 
     // Nico: Added NetworkPhysicsInteractable reference to make the isThrown variable non static
     // so that multiple balls could be supported in the future
-    private NetworkPhysicsInteractable m_networkPhysicsInteractable;
+    public NetworkPhysicsInteractable m_networkPhysicsInteractable;
 
     
     void Start()
@@ -125,5 +125,10 @@ public class BallScoring : MonoBehaviour
             UpdateScore(true); // skip scoring
             RespawnBall();   
         }
+    }
+
+    private bool getIsThrown()
+    {
+        return m_networkPhysicsInteractable.isThrown;
     }
 }
