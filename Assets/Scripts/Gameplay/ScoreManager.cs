@@ -31,7 +31,9 @@ public class ScoreManager : NetworkBehaviour
     public TMP_Text[] scoreTextsPlayer2; // Weise dies im Inspector zu!
 
     public AudioSource m_scoreSound;
-    public AudioSource m_winSound;
+    public AudioSource m_scorelostSound;
+    public AudioSource m_winGameSound;
+    public AudioSource m_loseGameSound;
 
     // NetworkVariables synchronisieren den Punktestand. Nur der Server darf schreiben.
     public NetworkVariable<int> Player1Score = new NetworkVariable<int>(
@@ -163,12 +165,12 @@ public class ScoreManager : NetworkBehaviour
             CustomDebugLog.Singleton.LogNetworkManager("SERVER: Spieler 1 hat 5 Punkte erreicht. Score wird zur�ckgesetzt.");
         
             // win sound
-            playWinSoundRpc();
+            playWinLoseSoundRpc(AssignPlayerColor.PlayerColor.Blue);
         }
 
         else {
             // score sound
-            playScoreSoundRpc();
+            playScoreSoundRpc(AssignPlayerColor.PlayerColor.Blue);
         }
 
     }
@@ -200,27 +202,40 @@ public class ScoreManager : NetworkBehaviour
             CustomDebugLog.Singleton.LogNetworkManager("SERVER: Spieler 1 hat 5 Punkte erreicht. Score wird zur�ckgesetzt.");
             
             // win sound
-            playWinSoundRpc();
+            playWinLoseSoundRpc(AssignPlayerColor.PlayerColor.Red);
         }
 
         else {
             // score sound
-            playScoreSoundRpc();
+            playScoreSoundRpc(AssignPlayerColor.PlayerColor.Red);
         }
 
     }
 
     [Rpc(SendTo.Everyone)]
-    private void playScoreSoundRpc()
+    private void playScoreSoundRpc(AssignPlayerColor.PlayerColor playerColor)
     {
-        m_scoreSound.Play();
-
+        if (playerColor == AssignPlayerColor.getPlayerColor())
+        {
+            m_scoreSound.Play();
+        }
+        else
+        {
+            m_scorelostSound.Play();
+        }
     }
 
     [Rpc(SendTo.Everyone)]
-    private void playWinSoundRpc()
+    private void playWinLoseSoundRpc(AssignPlayerColor.PlayerColor playerColor)
     {
-        m_winSound.Play();
+        if (playerColor == AssignPlayerColor.getPlayerColor())
+        {
+            m_winGameSound.Play();
+        }
+        else
+        {
+            m_loseGameSound.Play();
+        }
     }
 
 

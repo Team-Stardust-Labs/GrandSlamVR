@@ -44,6 +44,7 @@ namespace XRMultiplayer
 
         // Flag to track thrown/respawned for respawn
         public bool isThrown = false;
+        public AssignPlayerColor.PlayerColor lastThrownPlayerColor = AssignPlayerColor.PlayerColor.None;
 
         [Header("Audio Options")]
         [SerializeField] private AudioSource m_ThrowLightAudioSource;
@@ -252,6 +253,7 @@ namespace XRMultiplayer
 
             // reset thrown
             isThrown = false;
+            lastThrownPlayerColor = AssignPlayerColor.PlayerColor.None;
 
             // reset trails on grab
             deactivateTrailsRpc(); 
@@ -305,10 +307,12 @@ namespace XRMultiplayer
 
             // throw
             isThrown = true;
+            lastThrownPlayerColor = AssignPlayerColor.getPlayerColor();
 
             // play audio and trail
             bool strongThrow = m_Rigidbody.linearVelocity.magnitude > 75.0f;
             if (strongThrow) {
+                m_Rigidbody.linearVelocity = m_Rigidbody.linearVelocity * 1.5f;
                 m_ThrowStrongAudioSource.Play();
             }
             else {
