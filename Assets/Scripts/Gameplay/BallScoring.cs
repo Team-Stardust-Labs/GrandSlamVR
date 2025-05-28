@@ -14,10 +14,11 @@ public class BallScoring : MonoBehaviour
     private Transform currentBallSpawn;
 
     private Rigidbody m_rigidbody;
-
-    // Nico: Added NetworkPhysicsInteractable reference to make the isThrown variable non static
-    // so that multiple balls could be supported in the future
     public NetworkPhysicsInteractable m_networkPhysicsInteractable;
+    
+    // Added: Reference to the default material, assign in Inspector
+    [SerializeField] private Material defaultBallMaterial; 
+    private Renderer m_renderer;
 
     
     void Start()
@@ -25,6 +26,31 @@ public class BallScoring : MonoBehaviour
         currentBallSpawn = new GameObject("DefaultSpawn").transform;
         m_rigidbody = GetComponent<Rigidbody>();
         m_networkPhysicsInteractable = GetComponent<NetworkPhysicsInteractable>();
+        m_renderer = GetComponent<Renderer>();
+
+        if (m_renderer == null)
+        {
+            Debug.LogError("BallScoring: Renderer component not found on GameObject.", this.gameObject);
+            return; 
+        }
+
+        if (defaultBallMaterial == null)
+        {
+            Debug.LogWarning("BallScoring: defaultBallMaterial not assigned in Inspector. Using current renderer's sharedMaterial as default. Please assign it in the Inspector for robustness.", this.gameObject);
+            defaultBallMaterial = m_renderer.sharedMaterial;
+            if (defaultBallMaterial == null) {
+                 Debug.LogError("BallScoring: Renderer has no sharedMaterial to use as default, and defaultBallMaterial was not assigned.", this.gameObject);
+                 return; 
+            }
+        }
+        else
+        {
+            // Use the assigned defaultBallMaterial
+            if (m_renderer.sharedMaterial != defaultBallMaterial)
+            {
+                m_renderer.sharedMaterial = defaultBallMaterial;
+            }
+        }
     }
 
     // Bounces reset on respawn or grab
@@ -32,6 +58,23 @@ public class BallScoring : MonoBehaviour
     public void ResetBounces() {
         bounces = 0;
     }   
+
+    // Color resets on respawn or grab
+    // gets called by networkphysicsinteractable on select entered
+    public void ResetColor() {
+        if (defaultBallMaterial == null) {
+            Debug.LogError("BallScoring: defaultBallMaterial is not set. Cannot reset color. Please assign it in the Inspector or ensure it's picked up in Start().", this.gameObject);
+            return;
+        }
+
+        // Ensure default material is set
+        if (m_renderer.sharedMaterial != defaultBallMaterial) {
+            m_renderer.sharedMaterial = defaultBallMaterial;
+        }
+
+        defaultBallMaterial.SetColor(Shader.PropertyToID("_Color"), new Color(0.816f, 1.0f, 0.0f));
+        defaultBallMaterial.SetColor(Shader.PropertyToID("_EmissionColor"), new Color(0.3066064f, 0.6588235f, 0.2941176f));
+    }
 
     void FixedUpdate() {
         /* BUGGY
@@ -66,14 +109,12 @@ public class BallScoring : MonoBehaviour
         {
             // score for player1, but give ball to player2
             currentBallSpawn = ballSpawnPlayer2;
-
             ScoreManager.Singleton.PointToPlayer1Request();
         }
         else
         {
             // score for player2, but give ball to player1
             currentBallSpawn = ballSpawnPlayer1;
-
             ScoreManager.Singleton.PointToPlayer2Request();
         }
     }
@@ -81,6 +122,7 @@ public class BallScoring : MonoBehaviour
     private void RespawnBall() {
 
         ResetBounces();
+        ResetColor();
 
         // Fallback spawnpoints
         if (ballSpawnPlayer2 == null)
@@ -126,8 +168,27 @@ public class BallScoring : MonoBehaviour
             if (bounces > maxBounces)
             {
                 UpdateScore();
-                RespawnBall();                
+                RespawnBall();  
+                return;
             }
+
+            // Update color
+            if (m_renderer != null && defaultBallMaterial != null)
+            {
+                if (m_renderer.sharedMaterial != defaultBallMaterial) {
+                    m_renderer.sharedMaterial = defaultBallMaterial;
+                }
+                float colorValue = (float)bounces / (float)maxBounces;
+                defaultBallMaterial.SetColor(Shader.PropertyToID("_Color"), new Color(1.0f, 1.0f - colorValue * 1.5f, 1.0f - colorValue * 1.5f));
+            }
+        }
+
+        
+        if (collision.gameObject.CompareTag("Respawn"))
+        {
+            UpdateScore(true); // skip scoring
+            RespawnBall();
+            return;
         }
 
         
