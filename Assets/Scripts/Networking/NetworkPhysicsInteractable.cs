@@ -260,6 +260,8 @@ namespace XRMultiplayer
 
             // Reset Bounces on Ball Scoring
             m_ball_scoring.ResetBounces();
+            // Reset Color on Ball Scoring
+            m_ball_scoring.ResetColor();
 
             // Play haptics on both controllers on Item grab
             PXR_Input.SendHapticImpulse(PXR_Input.VibrateType.BothController, 0.5f, 250, 50);
