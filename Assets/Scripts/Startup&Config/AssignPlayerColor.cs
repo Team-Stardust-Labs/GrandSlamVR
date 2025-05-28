@@ -5,14 +5,27 @@ public class AssignPlayerColor : MonoBehaviour
 {
     public enum PlayerColor
     {
-        Blue,
-        Red
+        Blue, // Blue is also the Host
+        Red,
+        None
     }
 
-    public PlayerColor getPlayerColorFromInt (int color)
+    public static bool isBlue()
+    {
+        return PlayerPrefs.GetInt("PlayerColor") == (int)PlayerColor.Blue;
+    }
+
+    public PlayerColor getPlayerColorFromInt(int color)
     {
         return (PlayerColor)color;
     }
+
+    public static PlayerColor getPlayerColor()
+    {
+        return (PlayerColor) PlayerPrefs.GetInt("PlayerColor");
+    }
+
+    
 
     public void selectBlueColor()
     {
@@ -32,6 +45,6 @@ public class AssignPlayerColor : MonoBehaviour
 
     public void toGameplayScene()
     {
-        SceneManager.LoadScene("FinalMapScene");
+        SceneManager.LoadScene("TutorialScene");
     }
 }

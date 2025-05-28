@@ -43,16 +43,30 @@ public class BallScoring : MonoBehaviour
         }*/
     }
 
-    private void UpdateScore(bool skipScoring = false) {
+    private void UpdateScore(bool penaltyForLastPlayerThrown = false) { // if penaltyForLastPlayerThrown is true, the player who threw the ball last gets a penalty
+
+        if (penaltyForLastPlayerThrown && m_networkPhysicsInteractable.isThrown == true)
+        {
+            if (m_networkPhysicsInteractable.lastThrownPlayerColor == AssignPlayerColor.PlayerColor.Blue)
+            {
+                currentBallSpawn = ballSpawnPlayer2;
+                ScoreManager.Singleton.PointToPlayer2Request();
+                return;
+            }
+            else if (m_networkPhysicsInteractable.lastThrownPlayerColor == AssignPlayerColor.PlayerColor.Red)
+            {
+                currentBallSpawn = ballSpawnPlayer1;
+                ScoreManager.Singleton.PointToPlayer1Request();
+                return;
+            }
+        }
+
         // Update score 
         if (transform.position.x > 0.0f)
         {
             // score for player1, but give ball to player2
             currentBallSpawn = ballSpawnPlayer2;
 
-            if (skipScoring) {
-                return;
-            }
             ScoreManager.Singleton.PointToPlayer1Request();
         }
         else
@@ -60,9 +74,6 @@ public class BallScoring : MonoBehaviour
             // score for player2, but give ball to player1
             currentBallSpawn = ballSpawnPlayer1;
 
-            if (skipScoring) {
-                return;
-            }
             ScoreManager.Singleton.PointToPlayer2Request();
         }
     }
@@ -122,7 +133,7 @@ public class BallScoring : MonoBehaviour
         
         if (collision.gameObject.CompareTag("BoundingBox"))
         {
-            UpdateScore(true); // skip scoring
+            UpdateScore(true); // penalty for last player thrown
             RespawnBall();   
         }
     }

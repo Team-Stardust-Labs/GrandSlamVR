@@ -10,6 +10,8 @@ public class NetworkConnect : MonoBehaviour
     public GameObject hostDiscoveryObject; // Object with LanBroadcastService
     public GameObject joinDiscoveryObject; // Object with LanDiscoveryClient + ConnectToDiscoveredHost
 
+    public MapManager mapManager;
+
     private void Start()
     {
         // Ensure the discovery objects are inactive at the start
@@ -20,6 +22,23 @@ public class NetworkConnect : MonoBehaviour
 
         string localIP = GetLocalIPAddress();
         CustomDebugLog.Singleton.Log("Local IP Address: " + localIP);
+
+
+        CustomDebugLog.Singleton.Log("Player Color: " + AssignPlayerColor.getPlayerColor());
+    }
+
+    public void StartGame()
+    {
+        // Blue hosts the game and is also the server
+        if (AssignPlayerColor.isBlue())
+        {
+            HostGame();
+        }
+        else
+        {
+            // Red joins the game
+            JoinGame();
+        }
     }
 
     public void HostGame()
@@ -31,6 +50,9 @@ public class NetworkConnect : MonoBehaviour
         transport.SetConnectionData("0.0.0.0", 7777); // '0.0.0.0' listens on all network interfaces
         transport.ConnectionData.ServerListenAddress = "0.0.0.0"; // Accept external connections
         NetworkManager.Singleton.StartHost(); // Start the server
+
+        // maybe callback on client connected
+        mapManager.joinTeam1();
     }
 
     public void JoinGame()
@@ -46,7 +68,9 @@ public class NetworkConnect : MonoBehaviour
         if (!string.IsNullOrEmpty(connector.discovery.foundAddress))
         {
             CustomDebugLog.Singleton.Log("Connecting to " + connector.discovery.foundAddress);
-            connector.TryConnect();
+            if (connector.TryConnect()) {
+                mapManager.joinTeam2();
+            }
             CancelInvoke(nameof(TryJoin));
         }
     }
