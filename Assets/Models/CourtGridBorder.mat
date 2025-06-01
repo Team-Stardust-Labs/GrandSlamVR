@@ -28,27 +28,29 @@ Material:
     m_TexEnvs:
     - _DetailAlbedoMap:
         m_Texture: {fileID: 2800000, guid: 30c625deb12364e2a862ff5f2f443749, type: 3}
-        m_Scale: {x: 30, y: 45}
+        m_Scale: {x: 40, y: 40}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 2800000, guid: 30c625deb12364e2a862ff5f2f443749, type: 3}
-        m_Scale: {x: 150, y: 450}
+        m_Scale: {x: 80, y: 80}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 2dff5adea12524533af87253601ac4e7, type: 3}
-        m_Scale: {x: 150, y: 450}
+        m_Scale: {x: 80, y: 80}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _DstBlend: 10
     - _GlossMapScale: 0.38
-    - _Glossiness: 1
-    - _Metallic: 0.15
+    - _Glossiness: 0
+    - _GlossyReflections: 1
+    - _Metallic: 0
     - _Mode: 3
     - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 0.759434, g: 0.94095117, b: 1, a: 0.57254905}
+    - _Color: {r: 0.25943398, g: 0.72013897, b: 1, a: 0.34117648}
     - _EmissionColor: {r: 0.33481097, g: 0.32783014, b: 0.49999994, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
