@@ -109,12 +109,14 @@ public class BallScoring : MonoBehaviour
         {
             // score for player1, but give ball to player2
             currentBallSpawn = ballSpawnPlayer2;
+
             ScoreManager.Singleton.PointToPlayer1Request();
         }
         else
         {
             // score for player2, but give ball to player1
             currentBallSpawn = ballSpawnPlayer1;
+
             ScoreManager.Singleton.PointToPlayer2Request();
         }
     }
@@ -194,6 +196,7 @@ public class BallScoring : MonoBehaviour
         
         if (collision.gameObject.CompareTag("BoundingBox"))
         {
+            UpdateScore(true); // penalty for last player thrown
             UpdateScore(true); // penalty for last player thrown
             RespawnBall();   
         }
