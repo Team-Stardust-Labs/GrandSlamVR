@@ -33,8 +33,8 @@ MonoBehaviour:
   sceneCapture: 0
   sharedAnchor: 0
   spatialMesh: 1
-  meshLod: 2
-  superResolution: 1
+  meshLod: 0
+  superResolution: 0
   normalSharpening: 0
   qualitySharpening: 0
   fixedFoveatedSharpening: 0

@@ -197,7 +197,6 @@ public class BallScoring : MonoBehaviour
         if (collision.gameObject.CompareTag("BoundingBox"))
         {
             UpdateScore(true); // penalty for last player thrown
-            UpdateScore(true); // penalty for last player thrown
             RespawnBall();   
         }
     }
