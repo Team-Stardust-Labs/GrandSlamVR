@@ -8,7 +8,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 namespace XRMultiplayer
 {
-    [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(BallScoring))]
+    [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(BallScoring)), RequireComponent(typeof(AudioSource))]
     public class NetworkPhysicsInteractable : NetworkBaseInteractable
     {
         [Header("Ownership Transfer Settings")]
@@ -49,11 +49,14 @@ namespace XRMultiplayer
         [Header("Audio Options")]
         [SerializeField] private AudioSource m_ThrowLightAudioSource;
         [SerializeField] private AudioSource m_ThrowStrongAudioSource;
+        [SerializeField] private AudioSource m_BounceSound;
+        private AudioSource m_FlyingAudioSource;
 
         // Trail
         [Header("Trail Options")]
         [SerializeField] private GameObject trailPrefab;
         private List<TrailRenderer> m_TrailRenderers = new List<TrailRenderer>();
+
 
         public override void Awake()
         {
@@ -62,6 +65,7 @@ namespace XRMultiplayer
             m_Rigidbody = GetComponent<Rigidbody>();
             m_Collider = GetComponentInChildren<Collider>();
             m_ball_scoring = GetComponent<BallScoring>();
+            m_FlyingAudioSource = GetComponent<AudioSource>();
 
             interactorVelocityHistory = new Vector3[interactorFramesToCalculate];
 
@@ -126,6 +130,11 @@ namespace XRMultiplayer
 
             m_PrevPos = transform.position;*/
 
+
+            // flying volume proportional to ball velocity
+            m_FlyingAudioSource.volume = Mathf.Clamp(m_Rigidbody.linearVelocity.magnitude / 20.0f, 0.2f, 1.0f);
+            m_BounceSound.volume = Mathf.Clamp(m_Rigidbody.linearVelocity.magnitude / 20.0f, 0.8f, 1.0f);
+            m_BounceSound.pitch = 0.8f + Mathf.Clamp(m_Rigidbody.linearVelocity.magnitude / 80.0f, 0.0f, 0.5f);
             
             if (m_CurrentInteractor != null && isInteracting)
             {
@@ -253,6 +262,7 @@ namespace XRMultiplayer
 
             // reset thrown
             isThrown = false;
+            m_FlyingAudioSource.Stop();
             lastThrownPlayerColor = AssignPlayerColor.PlayerColor.None;
 
             // reset trails on grab
@@ -309,6 +319,7 @@ namespace XRMultiplayer
 
             // throw
             isThrown = true;
+            m_FlyingAudioSource.Play();
             lastThrownPlayerColor = AssignPlayerColor.getPlayerColor();
 
             // play audio and trail
@@ -334,6 +345,7 @@ namespace XRMultiplayer
         public override void OnLostOwnership()
         {
             base.OnLostOwnership();
+            m_FlyingAudioSource.Play(); // ball is so far away we probably cant hear the sound anyways
             if (checkOwnershipRoutine != null) StopCoroutine(checkOwnershipRoutine);
             m_RequestingOwnership = false;
             CustomDebugLog.Singleton.LogNetworkManager($"Ownership Lost on Object {gameObject.name}");
@@ -341,6 +353,13 @@ namespace XRMultiplayer
 
         void OnCollisionEnter(Collision collision)
         {
+
+            if (collision.gameObject.CompareTag("Court"))
+            {
+                // play bounce sound
+                m_BounceSound.Play();
+            }
+
             if (!IsOwner || !m_AllowCollisionOwnershipExchange) return;
 
             NetworkPhysicsInteractable other = collision.transform.GetComponentInParent<NetworkPhysicsInteractable>();
