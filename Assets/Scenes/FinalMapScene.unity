@@ -517,11 +517,32 @@ PrefabInstance:
       propertyPath: origin_offset
       value: 
       objectReference: {fileID: 1130798096}
+    - target: {fileID: 5404614517436627013, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: enableSuperResolution
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7769270634755231001, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: enableSuperResolution
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1717954561962503725, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 618037189}
   m_SourcePrefab: {fileID: 100100000, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+--- !u!1 &150764586 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8435088010182828942, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 150764585}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &150764587 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1399326403576139953, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 150764585}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &158182483 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1500a5535a073af4797d5ba960824cb3, type: 3}
@@ -1477,6 +1498,23 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1717954561962503725, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
   m_PrefabInstance: {fileID: 150764585}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &618037189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 618037188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c04c3b08a36a68499d626e47eb80d13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllerLeft: {fileID: 150764587}
+  controllerRight: {fileID: 150764586}
+  playerModelPrefab: {fileID: 1360531580990865591, guid: 963fcbd0030cb43b084a3aab55d5a3df, type: 3}
+  blueMaterial: {fileID: 2100000, guid: 74ce319109b4c9746859132c9589bf19, type: 2}
+  redMaterial: {fileID: 2100000, guid: 05be36470a27c8f42a5c7fd5d93520d6, type: 2}
 --- !u!1 &621789686
 GameObject:
   m_ObjectHideFlags: 0
