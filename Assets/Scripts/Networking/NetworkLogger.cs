@@ -62,16 +62,4 @@ public class NetworkLogger : MonoBehaviour
     {
         CustomDebugLog.Singleton.LogNetworkManager("[NetworkLogger] Transport failure occurred.");
     }
-
-    // Optional: Add a GUI debug log output for in-VR or mobile use
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            CustomDebugLog.Singleton.LogNetworkManager($"[NetworkLogger] State: IsHost={NetworkManager.Singleton.IsHost}, " +
-                      $"IsServer={NetworkManager.Singleton.IsServer}, " +
-                      $"IsClient={NetworkManager.Singleton.IsClient}, " +
-                      $"IsConnectedClient={NetworkManager.Singleton.IsConnectedClient}");
-        }
-    }
 }

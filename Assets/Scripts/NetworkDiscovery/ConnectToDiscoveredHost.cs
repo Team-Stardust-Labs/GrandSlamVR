@@ -41,5 +41,4 @@ public class ConnectToDiscoveredHost : MonoBehaviour
         return false; // Connection was a failure
     }
 
-
 }
