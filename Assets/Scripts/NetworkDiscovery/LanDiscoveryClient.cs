@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Unity.Netcode;
 using UnityEngine;
 
 public class LanDiscoveryClient : MonoBehaviour
@@ -40,6 +41,23 @@ public class LanDiscoveryClient : MonoBehaviour
                 }
             }
             catch { }
+        }
+    }
+
+    public void StopListening()
+    {
+        running = false;
+
+        if (NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsHost)
+        {
+            NetworkManager.Singleton.Shutdown(); 
+        }
+
+        if (udpClient != null)
+        {
+            udpClient.Close();
+            udpClient.Dispose();
+            udpClient = null;
         }
     }
 
