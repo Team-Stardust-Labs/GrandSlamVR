@@ -36,11 +36,12 @@ namespace XRMultiplayer
         private BallScoring m_ball_scoring;
 
         // Lasso
-        [SerializeField] private int interactorFramesToCalculate = 8;
+        [SerializeField] private int interactorFramesToCalculate = 16;
         private Vector3[] interactorVelocityHistory;
         private int interactorFrameIndex = 0;
         private Vector3 interactorPrevPosition;
         private Vector3 averageHandVelocity;
+        private Vector3 lastHandVelocity;
 
         // Flag to track thrown/respawned for respawn
         public bool isThrown = false;
@@ -57,6 +58,9 @@ namespace XRMultiplayer
         [SerializeField] private GameObject trailPrefab;
         private List<TrailRenderer> m_TrailRenderers = new List<TrailRenderer>();
 
+        //etc
+        private UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable grabInteractable;
+
 
         public override void Awake()
         {
@@ -66,6 +70,7 @@ namespace XRMultiplayer
             m_Collider = GetComponentInChildren<Collider>();
             m_ball_scoring = GetComponent<BallScoring>();
             m_FlyingAudioSource = GetComponent<AudioSource>();
+            grabInteractable = GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
 
             interactorVelocityHistory = new Vector3[interactorFramesToCalculate];
 
@@ -99,10 +104,38 @@ namespace XRMultiplayer
             }
         }
 
+        public void Ungrab()
+        {
+            if (grabInteractable.isSelected && grabInteractable.interactorsSelecting.Count > 0)
+            {
+                // Get the interactor (e.g., controller or hand)
+                UnityEngine.XR.Interaction.Toolkit.Interactors.IXRSelectInteractor interactor = grabInteractable.interactorsSelecting[0];
+
+                // Get the interaction manager
+                XRInteractionManager interactionManager = grabInteractable.interactionManager;
+
+                // Fallback if not set explicitly
+                if (interactionManager == null)
+                {
+                    interactionManager = FindObjectOfType<XRInteractionManager>();
+                }
+
+                if (interactionManager != null)
+                {
+                    interactionManager.SelectExit(interactor, grabInteractable);
+                }
+                else
+                {
+                    Debug.LogWarning("No XRInteractionManager found to force ungrab.");
+                }
+            }
+        }
+
         [Rpc(SendTo.Everyone)]
         public void triggerTrailsRpc(bool strongThrow)
-        {   
-            if (strongThrow) {
+        {
+            if (strongThrow)
+            {
                 // Enable/disable trails based on throw strength
                 foreach (var trail in m_TrailRenderers)
                 {
@@ -110,9 +143,10 @@ namespace XRMultiplayer
                     {
                         trail.emitting = true;
                     }
-                } 
+                }
             }
-            else {
+            else
+            {
                 // TODO HACKY MACKY
                 m_TrailRenderers[0].emitting = true;
             }
@@ -135,7 +169,7 @@ namespace XRMultiplayer
             m_FlyingAudioSource.volume = Mathf.Clamp(m_Rigidbody.linearVelocity.magnitude / 20.0f, 0.2f, 1.0f);
             m_BounceSound.volume = Mathf.Clamp(m_Rigidbody.linearVelocity.magnitude / 20.0f, 0.8f, 1.0f);
             m_BounceSound.pitch = 0.8f + Mathf.Clamp(m_Rigidbody.linearVelocity.magnitude / 80.0f, 0.0f, 0.5f);
-            
+
             if (m_CurrentInteractor != null && isInteracting)
             {
                 Vector3 currentInteractorPosition = m_CurrentInteractor.transform.position;
@@ -145,6 +179,8 @@ namespace XRMultiplayer
                 interactorFrameIndex = (interactorFrameIndex + 1) % interactorFramesToCalculate;
 
                 interactorPrevPosition = currentInteractorPosition;
+
+                lastHandVelocity = handVelocity;
 
                 // Calculate average
                 Vector3 total = Vector3.zero;
@@ -161,14 +197,32 @@ namespace XRMultiplayer
 
                     float smoothLassoDistance = Mathf.Lerp(rayInteractor.attachTransform.localPosition.z, newLassoDistance, Time.fixedDeltaTime * 0.75f);
 
+                    float attachPosition = Mathf.Clamp(smoothLassoDistance, 1.0f, 10.0f);
+
                     // Set the attach point's local position along the Z-axis (forward)
-                    rayInteractor.attachTransform.localPosition = new Vector3(0f, 0f, smoothLassoDistance);
+                    rayInteractor.attachTransform.localPosition = new Vector3(0.0f, 0.0f, attachPosition);
+                }
+
+                return;
+            }
+
+            // reset velocity history to 0
+            if (!isInteracting)
+            {
+                for (int i = 0; i < interactorFramesToCalculate; i++)
+                {
+                    interactorVelocityHistory[i] = new Vector3(0.0f, 0.0f, 0.0f);
+                    interactorFrameIndex = 0;
                 }
             }
         }
 
         float LassoCurve(float x)
         {
+            if (x < 4f)
+            {
+                return x;
+            }
             if (x < 8f)
             {
                 return x * 1.5f; // Linear growth
@@ -266,7 +320,7 @@ namespace XRMultiplayer
             lastThrownPlayerColor = AssignPlayerColor.PlayerColor.None;
 
             // reset trails on grab
-            deactivateTrailsRpc(); 
+            deactivateTrailsRpc();
 
             // Reset Bounces on Ball Scoring
             m_ball_scoring.ResetBounces();
@@ -323,12 +377,14 @@ namespace XRMultiplayer
             lastThrownPlayerColor = AssignPlayerColor.getPlayerColor();
 
             // play audio and trail
-            bool strongThrow = m_Rigidbody.linearVelocity.magnitude > 75.0f;
-            if (strongThrow) {
-                m_Rigidbody.linearVelocity = m_Rigidbody.linearVelocity * 1.5f;
+            bool strongThrow = m_Rigidbody.linearVelocity.magnitude > 80.0f;
+            if (strongThrow)
+            {
+                m_Rigidbody.linearVelocity = m_Rigidbody.linearVelocity * 1.25f;
                 m_ThrowStrongAudioSource.Play();
             }
-            else {
+            else
+            {
                 m_ThrowLightAudioSource.Play();
             }
 
@@ -377,8 +433,8 @@ namespace XRMultiplayer
 
         public bool OwnershipTransferBlocked()
         {
-            return isInteracting || IsOwner || m_RequestingOwnership || 
-                   m_LockedOnSpawn.Value || !m_AllowCollisionOwnershipExchange || 
+            return isInteracting || IsOwner || m_RequestingOwnership ||
+                   m_LockedOnSpawn.Value || !m_AllowCollisionOwnershipExchange ||
                    !NetworkObject.IsSpawned || baseInteractable.isSelected || m_ResettingObject.Value;
         }
 
