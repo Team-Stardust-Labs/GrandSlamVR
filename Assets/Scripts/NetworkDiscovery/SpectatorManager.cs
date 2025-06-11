@@ -1,6 +1,9 @@
 // SpectatorManager.cs
 using UnityEngine;
-using Unity.Netcode; // Für NetworkManager und NetworkConfig
+using Unity.Netcode;
+using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
+using System.Collections; // Für NetworkManager und NetworkConfig
 
 public class SpectatorManager : MonoBehaviour
 {
@@ -55,6 +58,18 @@ public class SpectatorManager : MonoBehaviour
             }
             // Deaktiviere dieses GameObject, da es im VR-Modus nicht benötigt wird
             gameObject.SetActive(false);
+        }
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            if (joinDiscoveryObject != null)
+            {
+                lanConnector.discovery.StopListening();
+            }
+            SceneManager.LoadScene("StartupScene");
         }
     }
 

@@ -36,5 +36,4 @@ public class ConnectToDiscoveredHost : MonoBehaviour
     }
 }
 
-
 }

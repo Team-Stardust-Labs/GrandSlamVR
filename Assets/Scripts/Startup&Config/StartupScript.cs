@@ -25,7 +25,7 @@ public class StartupScript : MonoBehaviour
         Debug.Log($"StartupScript: RunModePlayerPrefKey hat den Wert: '{RunModePlayerPrefKey}'"); // Log 2
 
         // Versuche, den PlayerPref zu lesen
-        string currentRunMode = ""; // Initialisiere mit einem leeren String
+        string currentRunMode = "Spectator"; // Initialisiere mit einem Spectatorview
         try
         {
             currentRunMode = PlayerPrefs.GetString(RunModePlayerPrefKey);
