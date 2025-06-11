@@ -30,6 +30,7 @@ public class AssignPlayerColor : MonoBehaviour
     public void selectBlueColor()
     {
         PlayerPrefs.SetInt("PlayerColor", (int)PlayerColor.Blue);
+        PlayerPrefs.SetString("RunMode", "VR");
         PlayerPrefs.Save();
 
         CustomDebugLog.Singleton.Log($"Player Color steht auf {PlayerPrefs.GetInt("PlayerColor")} das ergibt {getPlayerColorFromInt(PlayerPrefs.GetInt("PlayerColor"))}");
@@ -38,6 +39,7 @@ public class AssignPlayerColor : MonoBehaviour
     public void selectRedColor()
     {
         PlayerPrefs.SetInt("PlayerColor", (int)PlayerColor.Red);
+        PlayerPrefs.SetString("RunMode", "VR");
         PlayerPrefs.Save();
 
         CustomDebugLog.Singleton.Log($"Player Color steht auf {PlayerPrefs.GetInt("PlayerColor")} das ergibt {(PlayerColor)PlayerPrefs.GetInt("PlayerColor")}");
