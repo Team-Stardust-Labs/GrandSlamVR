@@ -143,7 +143,9 @@ public class BallScoring : MonoBehaviour
         }
 
         // only move the object if we are the owner
-        if (m_networkPhysicsInteractable.IsOwner) {
+        if (m_networkPhysicsInteractable.IsOwner)
+        {
+            m_networkPhysicsInteractable.Ungrab();
             m_rigidbody.linearVelocity = Vector3.zero;
             m_rigidbody.angularVelocity = Vector3.zero;
             m_rigidbody.MovePosition(currentBallSpawn.position);
