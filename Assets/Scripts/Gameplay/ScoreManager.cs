@@ -16,6 +16,8 @@ using TMPro; // Erforderlich, wenn du TextMeshPro f�r deine UI verwendest
     - only the server can change the scores
     - everyone can call the PointToPlayer1Request() and PointToPlayer2Request() methods to award points to the players
 
+    Spectator:
+    - Sends important events to the spectator like points, winning, losing
 */
 
 
@@ -34,6 +36,8 @@ public class ScoreManager : NetworkBehaviour
     public AudioSource m_scorelostSound;
     public AudioSource m_winGameSound;
     public AudioSource m_loseGameSound;
+
+    public CameraSwitching spectator;
 
     // NetworkVariables synchronisieren den Punktestand. Nur der Server darf schreiben.
     public NetworkVariable<int> Player1Score = new NetworkVariable<int>(
@@ -163,14 +167,18 @@ public class ScoreManager : NetworkBehaviour
             ServerResetScores();
             // Optionale Log-Meldung, wenn der Score zur�ckgesetzt wird
             CustomDebugLog.Singleton.LogNetworkManager("SERVER: Spieler 1 hat 5 Punkte erreicht. Score wird zur�ckgesetzt.");
-        
+
             // win sound
             playWinLoseSoundRpc(AssignPlayerColor.PlayerColor.Blue);
         }
 
-        else {
+        else
+        {
             // score sound
             playScoreSoundRpc(AssignPlayerColor.PlayerColor.Blue);
+
+            
+            
         }
 
     }
@@ -200,12 +208,13 @@ public class ScoreManager : NetworkBehaviour
             ServerResetScores();
             // Optionale Log-Meldung, wenn der Score zur�ckgesetzt wird
             CustomDebugLog.Singleton.LogNetworkManager("SERVER: Spieler 1 hat 5 Punkte erreicht. Score wird zur�ckgesetzt.");
-            
+
             // win sound
             playWinLoseSoundRpc(AssignPlayerColor.PlayerColor.Red);
         }
 
-        else {
+        else
+        {
             // score sound
             playScoreSoundRpc(AssignPlayerColor.PlayerColor.Red);
         }
@@ -215,6 +224,7 @@ public class ScoreManager : NetworkBehaviour
     [Rpc(SendTo.Everyone)]
     private void playScoreSoundRpc(AssignPlayerColor.PlayerColor playerColor)
     {
+        spectator.OnScoreChanged();
         if (playerColor == AssignPlayerColor.getPlayerColor())
         {
             m_scoreSound.Play();

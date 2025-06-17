@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class CameraSwitching : MonoBehaviour
 {
+    public CinemachineCamera scoreboardCamera;
     public CinemachineCamera[] cameras;
     public float switchInterval;
 
@@ -21,7 +22,7 @@ public class CameraSwitching : MonoBehaviour
         foreach (var cam in cameras)
             cam.Priority = 0;
 
-        SwitchToRandomCamera();
+        SwitchToScoreboard();
     }
 
     void Update()
@@ -31,8 +32,9 @@ public class CameraSwitching : MonoBehaviour
         if (timer <= 0f)
         {
             timer = switchInterval;
+            scoreboardCamera.Priority = 0;
             SwitchToRandomCamera();
-            
+
         }
     }
 
@@ -62,13 +64,27 @@ public class CameraSwitching : MonoBehaviour
         for (int i = 0; i < cameras.Length; i++)
         {
             if (i == cameraIndex)
-                cameras[i].Priority = 10;   
+                cameras[i].Priority = 10;
             else
                 cameras[i].Priority = 0;
         }
-        if (cameraIndex <= fastSlots-1)
+        if (cameraIndex <= fastSlots - 1)
         {
             timer = fastInterval;
         }
+    }
+
+    protected void SwitchToScoreboard()
+    {
+
+        scoreboardCamera.Priority = 20;
+        foreach (var cam in cameras)
+            cam.Priority = 0;
+        timer = 1.0;
+    }
+
+    public void OnScoreChanged()
+    {
+        SwitchToScoreboard();
     }
 }
