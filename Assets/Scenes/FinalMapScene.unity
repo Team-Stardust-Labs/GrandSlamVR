@@ -765,7 +765,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 618037188}
   sphere: {fileID: 150764586}
-  heightThreshold: 1
+  heightThreshold: 1.35
 --- !u!4 &158182483 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1500a5535a073af4797d5ba960824cb3, type: 3}
