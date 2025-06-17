@@ -80,7 +80,7 @@ public class CameraSwitching : MonoBehaviour
         scoreboardCamera.Priority = 20;
         foreach (var cam in cameras)
             cam.Priority = 0;
-        timer = 1.0;
+        timer = 1.0f;
     }
 
     public void OnScoreChanged()
