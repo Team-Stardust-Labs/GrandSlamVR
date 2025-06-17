@@ -377,7 +377,7 @@ namespace XRMultiplayer
             lastThrownPlayerColor = AssignPlayerColor.getPlayerColor();
 
             // play audio and trail
-            bool strongThrow = m_Rigidbody.linearVelocity.magnitude > 80.0f;
+            bool strongThrow = m_Rigidbody.linearVelocity.magnitude > 79.0f;
             if (strongThrow)
             {
                 m_Rigidbody.linearVelocity = m_Rigidbody.linearVelocity * 1.25f;
