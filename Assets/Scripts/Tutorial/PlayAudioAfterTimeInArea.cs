@@ -4,23 +4,26 @@ public class PlayAudioAfterTimeInArea : MonoBehaviour
 {
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private float timeInArea = 1.5f;
+    [SerializeField] private GameObject[] vanishObjects;
+    [SerializeField] private string objectTag;
 
     private float timer = 0f;
-    private bool isPlayerInArea = false;
+    private bool isBallInArea = false;
 
     private bool alreadyPlayed = false;
 
     private void Update()
     {
-        if (isPlayerInArea && !alreadyPlayed)
+        if (isBallInArea && !alreadyPlayed)
         {
             timer += Time.deltaTime;
 
             if (timer >= timeInArea)
             {
                 PlayAudio();
+                DisableObjects();
                 timer = 0f;
-                isPlayerInArea = false;
+                isBallInArea = false;
                 alreadyPlayed = true;
             }
         }
@@ -28,14 +31,20 @@ public class PlayAudioAfterTimeInArea : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        isPlayerInArea = true;
-        timer = 0f;
+        if (other.CompareTag(objectTag))
+        {
+            isBallInArea = true;
+            timer = 0f;
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        isPlayerInArea = false;
-        timer = 0f;
+        if (other.CompareTag(objectTag))
+        {
+            isBallInArea = false;
+            timer = 0f;
+        }
     }
 
     private void PlayAudio()
@@ -47,6 +56,20 @@ public class PlayAudioAfterTimeInArea : MonoBehaviour
         else
         {
             Debug.LogWarning("AudioSource is not assigned.");
+        }
+    }
+
+    private void DisableObjects()
+    {
+        if (vanishObjects != null)
+        {
+            foreach (GameObject obj in vanishObjects)
+            {
+                if (obj != null)
+                {
+                    obj.SetActive(false);
+                }
+            }
         }
     }
 }

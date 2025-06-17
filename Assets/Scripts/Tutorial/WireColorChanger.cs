@@ -22,4 +22,21 @@ public class WireColorChanger : MonoBehaviour
             targetRenderer.material.SetColor("_WireColor", normalColor);
         }
     }
+
+    public void ChangeBoxColor()
+    {
+        if (targetRenderer != null && targetRenderer.material.HasProperty("_Color"))
+        {
+            targetRenderer.material.SetColor("_Color", enterColor);
+        }
+    }
+
+    public void ResetBoxColor()
+    {
+        if (targetRenderer != null && targetRenderer.material.HasProperty("_Color"))
+        {
+            targetRenderer.material.SetColor("_Color", normalColor);
+        }
+    }
+
 }
