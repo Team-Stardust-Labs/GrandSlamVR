@@ -20,6 +20,8 @@ public class BallScoring : MonoBehaviour
     [SerializeField] private Material defaultBallMaterial; 
     private Renderer m_renderer;
 
+    public CameraSwitching spectator;
+
     
     void Start()
     {
@@ -90,6 +92,7 @@ public class BallScoring : MonoBehaviour
 
         if (penaltyForLastPlayerThrown && m_networkPhysicsInteractable.isThrown == true)
         {
+
             if (m_networkPhysicsInteractable.lastThrownPlayerColor == AssignPlayerColor.PlayerColor.Blue)
             {
                 currentBallSpawn = ballSpawnPlayer2;
