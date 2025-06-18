@@ -13,6 +13,17 @@ MonoBehaviour:
   m_Name: SpectatorCamera Custom Blends
   m_EditorClassIdentifier: 
   CustomBlends:
+  - From: ScoreboardCamera
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 1
+      Time: 8
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
   - From: TotalCameraLeft
     To: '**ANY CAMERA**'
     Blend:
@@ -169,6 +180,17 @@ MonoBehaviour:
         m_RotationOrder: 4
   - From: '**ANY CAMERA**'
     To: RiverCamera
+    Blend:
+      Style: 0
+      Time: 12
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: '**ANY CAMERA**'
+    To: ScoreboardCamera
     Blend:
       Style: 0
       Time: 12
