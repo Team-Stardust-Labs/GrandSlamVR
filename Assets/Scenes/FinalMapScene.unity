@@ -1059,7 +1059,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2010085120437849477, guid: 9ec55189fab312141825d31ad5584d45, type: 3}
       propertyPath: m_TagString
-      value: BoundingBox
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 2010085120437849477, guid: 9ec55189fab312141825d31ad5584d45, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -1794,7 +1794,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e5e1b3c0d2be60b47981235187af0936, type: 3}
       propertyPath: m_TagString
-      value: BoundingBox
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e5e1b3c0d2be60b47981235187af0936, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -2653,7 +2653,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2010085120437849477, guid: 9ec55189fab312141825d31ad5584d45, type: 3}
       propertyPath: m_TagString
-      value: BoundingBox
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 2010085120437849477, guid: 9ec55189fab312141825d31ad5584d45, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -4489,7 +4489,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2586713759252572031, guid: 87123ac33e4f0f04bacc28c3d2dcb0f6, type: 3}
       propertyPath: m_TagString
-      value: BoundingBox
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 2586713759252572031, guid: 87123ac33e4f0f04bacc28c3d2dcb0f6, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -6188,7 +6188,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2586713759252572031, guid: 87123ac33e4f0f04bacc28c3d2dcb0f6, type: 3}
       propertyPath: m_TagString
-      value: BoundingBox
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 2586713759252572031, guid: 87123ac33e4f0f04bacc28c3d2dcb0f6, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -7299,7 +7299,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e5e1b3c0d2be60b47981235187af0936, type: 3}
       propertyPath: m_TagString
-      value: BoundingBox
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e5e1b3c0d2be60b47981235187af0936, type: 3}
       propertyPath: m_StaticEditorFlags
