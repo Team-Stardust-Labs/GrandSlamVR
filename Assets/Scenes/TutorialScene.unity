@@ -1831,7 +1831,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 415850083}
   sphere: {fileID: 415850082}
-  heightThreshold: 1.35
+  heightThreshold: 1
 --- !u!1 &449405623
 GameObject:
   m_ObjectHideFlags: 0
