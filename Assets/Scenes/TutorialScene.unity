@@ -2981,7 +2981,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Wirf in den mrkierten Bereich
+  m_text: 'Wirf in den markierten Bereich
 
 
 '
@@ -3269,7 +3269,7 @@ Transform:
   m_GameObject: {fileID: 861850064}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70216304, z: -0, w: -0.7120163}
-  m_LocalPosition: {x: -29.713465, y: 2.7399998, z: -4.2644362}
+  m_LocalPosition: {x: -29.57, y: 2.7399998, z: -14.74}
   m_LocalScale: {x: -13.274, y: 13.274, z: 13.274}
   m_ConstrainProportionsScale: 1
   m_Children:

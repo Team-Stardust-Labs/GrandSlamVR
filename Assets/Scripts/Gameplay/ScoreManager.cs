@@ -175,13 +175,13 @@ public class ScoreManager : NetworkBehaviour
         CustomDebugLog.Singleton.LogNetworkManager($"SERVER: Punkt f�r P1 vergeben. Neuer Stand: {Player1Score.Value}");
 
         // �berpr�fen, ob Spieler 1 die erforderlichen 5 Punkte erreicht hat
-        if (Player1Score.Value >= 5) // Oft pr�ft man >=, falls durch schnelle Ereignisse der Wert 5 �bersprungen wird
+        if (Player1Score.Value >= 7) // Oft pr�ft man >=, falls durch schnelle Ereignisse der Wert 5 �bersprungen wird
         {
-            gameRunning = false;
+            stopGameRpc(); // stop the game for everyone
             // Punkte-Limit erreicht (oder �berschritten), Score zur�cksetzen
             // ServerResetScores();
             // Optionale Log-Meldung, wenn der Score zur�ckgesetzt wird
-            CustomDebugLog.Singleton.LogNetworkManager("SERVER: Spieler 1 hat 5 Punkte erreicht. Score wird zur�ckgesetzt.");
+            CustomDebugLog.Singleton.LogNetworkManager("SERVER: Spieler 1 hat 7 Punkte erreicht. Score wird zur�ckgesetzt.");
 
             // win sound
             playWinLoseSoundRpc(AssignPlayerColor.PlayerColor.Blue);
@@ -217,13 +217,13 @@ public class ScoreManager : NetworkBehaviour
         CustomDebugLog.Singleton.LogNetworkManager($"SERVER: Punkt f�r P2 vergeben. Neuer Stand: {Player2Score.Value}");
 
         // �berpr�fen, ob Spieler 1 die erforderlichen 5 Punkte erreicht hat
-        if (Player2Score.Value >= 5) // Oft pr�ft man >=, falls durch schnelle Ereignisse der Wert 5 �bersprungen wird
+        if (Player2Score.Value >= 7) // Oft pr�ft man >=, falls durch schnelle Ereignisse der Wert 5 �bersprungen wird
         {
-            gameRunning = false;
+            stopGameRpc(); // stop the game for everyone
             // Punkte-Limit erreicht (oder �berschritten), Score zur�cksetzen
             // ServerResetScores();
             // Optionale Log-Meldung, wenn der Score zur�ckgesetzt wird
-            CustomDebugLog.Singleton.LogNetworkManager("SERVER: Spieler 1 hat 5 Punkte erreicht. Score wird zur�ckgesetzt.");
+            CustomDebugLog.Singleton.LogNetworkManager("SERVER: Spieler 1 hat 7 Punkte erreicht. Score wird zur�ckgesetzt.");
 
             // win sound
             playWinLoseSoundRpc(AssignPlayerColor.PlayerColor.Red);
@@ -251,7 +251,7 @@ public class ScoreManager : NetworkBehaviour
         }
 
         // Announcer
-        if (Player1Score.Value == 3) // equals 4 because this is called before adding to score
+        if (Player1Score.Value == 5) // equals 6 because this is called before adding to score (matchpoint to 7 is 6)
         {
             if (playerColor == AssignPlayerColor.PlayerColor.Blue)
             {
@@ -260,7 +260,7 @@ public class ScoreManager : NetworkBehaviour
             }
         }
 
-        if (Player2Score.Value == 3)// equals 4 because this is called before adding to score
+        if (Player2Score.Value == 5)// equals 6 because this is called before adding to score (matchpoint to 7 is 6)
         {
             if (playerColor == AssignPlayerColor.PlayerColor.Red)
             {
@@ -285,6 +285,12 @@ public class ScoreManager : NetworkBehaviour
 
         
         
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void stopGameRpc()
+    {
+        gameRunning = false;
     }
 
     [Rpc(SendTo.Everyone)]
