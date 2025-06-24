@@ -8,7 +8,7 @@ public class FinalScreen : MonoBehaviour
     public SpectatorManager spec; 
     public ScoreManager scoreManager; 
 
-    private float distance = 5f;
+    private float distance = 7f;
 
     void Start()
     {
