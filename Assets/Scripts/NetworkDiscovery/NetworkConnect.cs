@@ -51,7 +51,7 @@ public class NetworkConnect : MonoBehaviour
         transport.ConnectionData.ServerListenAddress = "0.0.0.0"; // Accept external connections
         NetworkManager.Singleton.StartHost(); // Start the server
 
-        // maybe callback on client connected
+        // TODO: maybe only join team with a callback on client connected
         mapManager.joinTeam1();
     }
 
@@ -68,10 +68,11 @@ public class NetworkConnect : MonoBehaviour
         if (!string.IsNullOrEmpty(connector.discovery.foundAddress))
         {
             CustomDebugLog.Singleton.Log("Connecting to " + connector.discovery.foundAddress);
-            if (connector.TryConnect()) {
+            if (connector.TryConnect())
+            {
                 mapManager.joinTeam2();
             }
-            CancelInvoke(nameof(TryJoin));
+            CancelInvoke(nameof(TryJoin)); // we found a host so we can stop trying to join
         }
     }
 
@@ -87,5 +88,30 @@ public class NetworkConnect : MonoBehaviour
             }
         }
         return localIP;
+    }
+
+    // This terminates the Network Connection for Server and Client
+    public void TerminateConnection()
+    {
+        CustomDebugLog.Singleton.Log("Terminating network connection...");
+
+        // Stop discovery broadcasts and listeners
+        if (hostDiscoveryObject.activeSelf)
+            hostDiscoveryObject.SetActive(false);
+
+        if (joinDiscoveryObject.activeSelf)
+            joinDiscoveryObject.SetActive(false);
+
+        // Stop network session based on current role
+        if (NetworkManager.Singleton.IsHost)
+        {
+            NetworkManager.Singleton.Shutdown(); // Stops host and disconnects all clients
+            CustomDebugLog.Singleton.Log("Host shut down.");
+        }
+        else if (NetworkManager.Singleton.IsClient)
+        {
+            NetworkManager.Singleton.Shutdown(); // Disconnects from the host
+            CustomDebugLog.Singleton.Log("Client disconnected.");
+        }
     }
 }

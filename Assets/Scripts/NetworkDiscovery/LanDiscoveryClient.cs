@@ -44,13 +44,14 @@ public class LanDiscoveryClient : MonoBehaviour
         }
     }
 
+    // Called by the SpectatorManager
     public void StopListening()
     {
         running = false;
 
         if (NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsHost)
         {
-            NetworkManager.Singleton.Shutdown(); 
+            NetworkManager.Singleton.Shutdown();
         }
 
         if (udpClient != null)
