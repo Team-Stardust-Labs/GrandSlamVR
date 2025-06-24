@@ -50,7 +50,7 @@ public class ButtonCombo : MonoBehaviour
     {
         if (lA && lB && rA && rB && aT)
         {
-            TriggerEvent(); // Your custom method
+            TriggerEvent();
         }
     }
 
