@@ -12,12 +12,34 @@ public class NetworkPlayer : NetworkBehaviour
     public Transform rightHand;
     public Renderer[] meshesToDisable;
 
+    [Header("Team Materials")]
+    public Material redMaterial;
+    public Material blueMaterial;
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        if (IsOwner) {
-            foreach (Renderer mesh in meshesToDisable) {
+        if (IsOwner)
+        {
+            foreach (Renderer mesh in meshesToDisable)
+            {
                 mesh.enabled = false;
+            }
+        }
+
+        // Use OwnerClientId instead of LocalClientId
+        if (OwnerClientId == 0)
+        {
+            foreach (Renderer mesh in meshesToDisable)
+            {
+                mesh.material.SetColor("_Color", redMaterial.color);
+            }
+        }
+        else
+        {
+            foreach (Renderer mesh in meshesToDisable)
+            {
+                mesh.material.SetColor("_Color", blueMaterial.color);
             }
         }
     }

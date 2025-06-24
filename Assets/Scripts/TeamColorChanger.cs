@@ -24,12 +24,12 @@ public class TeamColorChanger : MonoBehaviour
             controllerRight.GetComponent<Renderer>().material.SetColor("_LightColor_02", blueMaterial.GetColor("_Color"));
 
             // Set color of all child renderers of the player model
-            GameObject playerModel = Instantiate(playerModelPrefab);
+            /*GameObject playerModel = Instantiate(playerModelPrefab);
             Renderer[] renderers = playerModel.GetComponentsInChildren<Renderer>();
             foreach (Renderer rend in renderers)
             {
                 rend.material = redMaterial; // Inverse team colors
-            }
+            }*/
         }
         else
         {
@@ -39,12 +39,12 @@ public class TeamColorChanger : MonoBehaviour
             controllerRight.GetComponent<Renderer>().material.SetColor("_LightColor_02", redMaterial.GetColor("_Color"));
 
             // Set color of all child renderers of the player model
-            GameObject playerModel = Instantiate(playerModelPrefab);
+            /*GameObject playerModel = Instantiate(playerModelPrefab);
             Renderer[] renderers = playerModel.GetComponentsInChildren<Renderer>();
             foreach (Renderer rend in renderers)
             {
                 rend.material = blueMaterial; // Inverse team colors
-            }
+            }*/
         }
     }
 }
