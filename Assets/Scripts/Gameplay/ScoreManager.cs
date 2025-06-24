@@ -40,6 +40,8 @@ public class ScoreManager : NetworkBehaviour
 
     public AnnouncerMananger announcer;
 
+    private static bool gameRunning;
+
     // NetworkVariables synchronisieren den Punktestand. Nur der Server darf schreiben.
     public NetworkVariable<int> Player1Score = new NetworkVariable<int>(
         value: 0, // Startwert
@@ -69,6 +71,17 @@ public class ScoreManager : NetworkBehaviour
             // Optional: Wenn der ScoreManager �ber Szenenwechsel bestehen bleiben soll:
             // DontDestroyOnLoad(gameObject);
         }
+        gameRunning = true;
+    }
+
+    public static bool isGameFinished()
+    {
+        return !gameRunning;
+    }
+
+    public bool isBlueWinner()
+    {
+        return Player1Score.Value > Player2Score.Value;
     }
 
     // Wird aufgerufen, wenn das NetworkObject (und damit dieses Skript) im Netzwerk "erscheint"
@@ -164,8 +177,9 @@ public class ScoreManager : NetworkBehaviour
         // �berpr�fen, ob Spieler 1 die erforderlichen 5 Punkte erreicht hat
         if (Player1Score.Value >= 5) // Oft pr�ft man >=, falls durch schnelle Ereignisse der Wert 5 �bersprungen wird
         {
+            gameRunning = false;
             // Punkte-Limit erreicht (oder �berschritten), Score zur�cksetzen
-            ServerResetScores();
+            // ServerResetScores();
             // Optionale Log-Meldung, wenn der Score zur�ckgesetzt wird
             CustomDebugLog.Singleton.LogNetworkManager("SERVER: Spieler 1 hat 5 Punkte erreicht. Score wird zur�ckgesetzt.");
 
@@ -205,8 +219,9 @@ public class ScoreManager : NetworkBehaviour
         // �berpr�fen, ob Spieler 1 die erforderlichen 5 Punkte erreicht hat
         if (Player2Score.Value >= 5) // Oft pr�ft man >=, falls durch schnelle Ereignisse der Wert 5 �bersprungen wird
         {
+            gameRunning = false;
             // Punkte-Limit erreicht (oder �berschritten), Score zur�cksetzen
-            ServerResetScores();
+            // ServerResetScores();
             // Optionale Log-Meldung, wenn der Score zur�ckgesetzt wird
             CustomDebugLog.Singleton.LogNetworkManager("SERVER: Spieler 1 hat 5 Punkte erreicht. Score wird zur�ckgesetzt.");
 
