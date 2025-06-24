@@ -91,6 +91,8 @@ public class SpectatorManager : MonoBehaviour
         {
             spectatorCameraObject.SetActive(true);
             Debug.Log("SpectatorManager: Spectator-Kamera aktiviert.");
+            Camera.main.tag = "Untagged";
+            spectatorCameraObject.tag = "MainCamera";
         }
         else
         {
