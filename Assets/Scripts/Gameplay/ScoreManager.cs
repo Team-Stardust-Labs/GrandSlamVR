@@ -2,7 +2,6 @@ using UnityEngine;
 using Unity.Netcode;
 using TMPro; // Erforderlich, wenn du TextMeshPro f�r deine UI verwendest
 
-
 /*
 
     Score Manager Overview
@@ -38,6 +37,8 @@ public class ScoreManager : NetworkBehaviour
     public AudioSource m_loseGameSound;
 
     public CameraSwitching spectator;
+
+    public AnnouncerMananger announcer;
 
     // NetworkVariables synchronisieren den Punktestand. Nur der Server darf schreiben.
     public NetworkVariable<int> Player1Score = new NetworkVariable<int>(
@@ -233,6 +234,42 @@ public class ScoreManager : NetworkBehaviour
         {
             m_scorelostSound.Play();
         }
+
+        // Announcer
+        if (Player1Score.Value == 3) // equals 4 because this is called before adding to score
+        {
+            if (playerColor == AssignPlayerColor.PlayerColor.Blue)
+            {
+                announcer.PlayMatchpointBlue();
+                return;
+            }
+        }
+
+        if (Player2Score.Value == 3)// equals 4 because this is called before adding to score
+        {
+            if (playerColor == AssignPlayerColor.PlayerColor.Red)
+            {
+                announcer.PlayMatchpointRed();
+                return;
+            }
+        }
+
+
+        if (playerColor == AssignPlayerColor.PlayerColor.Blue)
+        {
+            announcer.PlayPointBlue();
+            return;
+        }
+
+        if (playerColor == AssignPlayerColor.PlayerColor.Red)
+        {
+            announcer.PlayPointRed();
+            return;
+        }
+        
+
+        
+        
     }
 
     [Rpc(SendTo.Everyone)]
@@ -245,6 +282,17 @@ public class ScoreManager : NetworkBehaviour
         else
         {
             m_loseGameSound.Play();
+        }
+
+        // Announcer
+        if (playerColor == AssignPlayerColor.PlayerColor.Blue)
+        {
+            announcer.PlayWinBlue();
+        }
+
+        if (playerColor == AssignPlayerColor.PlayerColor.Red)
+        {
+            announcer.PlayWinRed();
         }
     }
 

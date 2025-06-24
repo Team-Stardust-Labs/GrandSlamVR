@@ -36,6 +36,16 @@ public class SpectatorManager : MonoBehaviour
         }
     }
 
+    public static bool isSpectator()
+    {
+        string currentRunMode = PlayerPrefs.GetString(StartupScript.RunModePlayerPrefKey);
+        if (currentRunMode == StartupScript.SpectatorModeValue)
+        {
+            return true;
+        }
+        return false;
+    }
+
     void Start()
     {
         Debug.Log("SpectatorManager: Start() aufgerufen.");
