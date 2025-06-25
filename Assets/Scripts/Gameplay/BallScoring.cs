@@ -211,7 +211,7 @@ public class BallScoring : MonoBehaviour
                 {
                     m_renderer.sharedMaterial = defaultBallMaterial;
                 }
-                float colorValue = (float)bounces / (float)maxBounces;
+                float colorValue = Mathf.Max((float)bounces, 1.0f) / (float)maxBounces;
                 defaultBallMaterial.SetColor(Shader.PropertyToID("_Color"), new Color(1.0f, 1.0f - colorValue * 1.5f, 1.0f - colorValue * 1.5f));
             }
         }
