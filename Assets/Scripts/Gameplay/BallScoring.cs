@@ -4,25 +4,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using XRMultiplayer;
 
+// Ensures that Rigidbody and NetworkPhysicsInteractable components are attached
 [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NetworkPhysicsInteractable))]
 public class BallScoring : MonoBehaviour
 {
-    [SerializeField] private int maxBounces = 1; // Max bounces before scoring
-    private int bounces = 0;
-    [SerializeField] private Transform ballSpawnPlayer1;
-    [SerializeField] private Transform ballSpawnPlayer2;
-    private Transform currentBallSpawn;
+    [SerializeField] private int maxBounces = 1; // Maximum allowed bounces before scoring
+    private int bounces = 0; // Current bounce count
 
-    private Rigidbody m_rigidbody;
-    public NetworkPhysicsInteractable m_networkPhysicsInteractable;
-    
-    // Added: Reference to the default material, assign in Inspector
-    [SerializeField] private Material defaultBallMaterial; 
-    private Renderer m_renderer;
+    [SerializeField] private Transform ballSpawnPlayer1; // Spawn point for player 1
+    [SerializeField] private Transform ballSpawnPlayer2; // Spawn point for player 2
+    private Transform currentBallSpawn; // Used to set the next spawn point for the ball
 
-    public CameraSwitching spectator;
+    private Rigidbody m_rigidbody; // Reference to the Rigidbody component
+    public NetworkPhysicsInteractable m_networkPhysicsInteractable; // Reference to the network physics component
 
-    
+    [SerializeField] private Material defaultBallMaterial; // Reference to the default ball material (assign in Inspector)
+    private Renderer m_renderer; // Renderer component for material changes
+
+    public CameraSwitching spectator; // Reference to spectator camera logic (optional)
+
+    // Initialization of components and material assignment
     void Start()
     {
         currentBallSpawn = new GameObject("DefaultSpawn").transform;
@@ -33,16 +34,18 @@ public class BallScoring : MonoBehaviour
         if (m_renderer == null)
         {
             Debug.LogError("BallScoring: Renderer component not found on GameObject.", this.gameObject);
-            return; 
+            return;
         }
 
+        // Fallback if no material is assigned in the Inspector
         if (defaultBallMaterial == null)
         {
             Debug.LogWarning("BallScoring: defaultBallMaterial not assigned in Inspector. Using current renderer's sharedMaterial as default. Please assign it in the Inspector for robustness.", this.gameObject);
             defaultBallMaterial = m_renderer.sharedMaterial;
-            if (defaultBallMaterial == null) {
-                 Debug.LogError("BallScoring: Renderer has no sharedMaterial to use as default, and defaultBallMaterial was not assigned.", this.gameObject);
-                 return; 
+            if (defaultBallMaterial == null)
+            {
+                Debug.LogError("BallScoring: Renderer has no sharedMaterial to use as default, and defaultBallMaterial was not assigned.", this.gameObject);
+                return;
             }
         }
         else
@@ -55,80 +58,75 @@ public class BallScoring : MonoBehaviour
         }
     }
 
-    // Bounces reset on respawn or grab
-    // gets called by networkphysicsinteractable on select entered
-    public void ResetBounces() {
+    // Resets the bounce count (called on respawn or when the ball is grabbed)
+    public void ResetBounces()
+    {
         bounces = 0;
-    }   
+    }
 
-    // Color resets on respawn or grab
-    // gets called by networkphysicsinteractable on select entered
-    public void ResetColor() {
-        if (defaultBallMaterial == null) {
+    // Resets the ball color (called on respawn or when the ball is grabbed)
+    public void ResetColor()
+    {
+        if (defaultBallMaterial == null)
+        {
             Debug.LogError("BallScoring: defaultBallMaterial is not set. Cannot reset color. Please assign it in the Inspector or ensure it's picked up in Start().", this.gameObject);
             return;
         }
 
-        // Ensure default material is set
-        if (m_renderer.sharedMaterial != defaultBallMaterial) {
+        // Ensure the default material is set
+        if (m_renderer.sharedMaterial != defaultBallMaterial)
+        {
             m_renderer.sharedMaterial = defaultBallMaterial;
         }
 
+        // Set color and emission to default values
         defaultBallMaterial.SetColor(Shader.PropertyToID("_Color"), new Color(0.816f, 1.0f, 0.0f));
         defaultBallMaterial.SetColor(Shader.PropertyToID("_EmissionColor"), new Color(0.3066064f, 0.6588235f, 0.2941176f));
     }
 
-    void FixedUpdate() {
-        /* BUGGY
-        // Reset ball if ball gets stale / dosent move or is out of bounds
-        if (m_rigidbody.linearVelocity.magnitude < 1.0 && m_networkPhysicsInteractable.isThrown == true)
-        {
-            // Free retry for the same player that had the ball
-            RespawnBall();
-        }*/
-    }
-
-    private void UpdateScore(bool penaltyForLastPlayerThrown = false) { // if penaltyForLastPlayerThrown is true, the player who threw the ball last gets a penalty
-
+    // Handles score updates and determines which player gets the point and where the ball respawns
+    // penaltyForLastPlayerThrown: If true, the last player who threw the ball gets a penalty
+    private void UpdateScore(bool penaltyForLastPlayerThrown = false)
+    {
+        // Triggers when penalty is to be applied
         if (penaltyForLastPlayerThrown && m_networkPhysicsInteractable.isThrown == true)
         {
-
+            // Give point to the opponent, respawn ball on their side
             if (m_networkPhysicsInteractable.lastThrownPlayerColor == AssignPlayerColor.PlayerColor.Blue)
             {
-                currentBallSpawn = ballSpawnPlayer2;
-                ScoreManager.Singleton.PointToPlayer2Request();
+                currentBallSpawn = ballSpawnPlayer2; // Spawn on red side
+                ScoreManager.Singleton.PointToPlayer2Request(); // ScoreManager handles Scoring
                 return;
             }
             else if (m_networkPhysicsInteractable.lastThrownPlayerColor == AssignPlayerColor.PlayerColor.Red)
             {
-                currentBallSpawn = ballSpawnPlayer1;
-                ScoreManager.Singleton.PointToPlayer1Request();
+                currentBallSpawn = ballSpawnPlayer1; // Spawn on blue side
+                ScoreManager.Singleton.PointToPlayer1Request(); // ScoreManager handles Scoring
                 return;
             }
         }
 
-        // Update score 
+        // Normal scoring based on ball position
         if (transform.position.x > 0.0f)
         {
-            // score for player1, but give ball to player2
+            // Point for player 1, ball to player 2
             currentBallSpawn = ballSpawnPlayer2;
-
-            ScoreManager.Singleton.PointToPlayer1Request();
+            ScoreManager.Singleton.PointToPlayer1Request(); // ScoreManager handles Scoring
         }
         else
         {
-            // score for player2, but give ball to player1
+            // Point for player 2, ball to player 1
             currentBallSpawn = ballSpawnPlayer1;
-
-            ScoreManager.Singleton.PointToPlayer2Request();
+            ScoreManager.Singleton.PointToPlayer2Request(); // ScoreManager handles Scoring
         }
     }
 
+    // Respawn logic when the ball is reset via button
     public void RespawnButtonCode()
     {
         currentBallSpawn.position = new Vector3(-70.0f, 5.0f, 0);
 
-        // only move the object if we are the owner
+        // Only move the object if we are the owner
         if (m_networkPhysicsInteractable.IsOwner)
         {
             m_networkPhysicsInteractable.Ungrab();
@@ -140,29 +138,30 @@ public class BallScoring : MonoBehaviour
         }
     }
 
+    // Respawn logic after scoring or error
     private void RespawnBall()
     {
-
+        // Resets the ball attributes
         ResetBounces();
         ResetColor();
 
-        // Fallback spawnpoints
+        // Fallback spawn points if not set
         if (ballSpawnPlayer2 == null)
         {
-            currentBallSpawn.position = ballSpawnPlayer1.position;
+            currentBallSpawn.position = ballSpawnPlayer1.position; // Default to player 1 spawn if player 2 spawn is not set
         }
 
         if (ballSpawnPlayer1 == null)
         {
-            currentBallSpawn.position = new Vector3(0, 5.0f, 0);
+            currentBallSpawn.position = new Vector3(0, 5.0f, 0); // Default to center if player 1 spawn is not set
         }
 
         if (currentBallSpawn == null)
         {
-            currentBallSpawn.position = ballSpawnPlayer1.position;
+            currentBallSpawn.position = ballSpawnPlayer1.position; // Default to player 1 spawn if currentBallSpawn is not set
         }
 
-        // only move the object if we are the owner
+        // Only move the object if we are the owner
         if (m_networkPhysicsInteractable.IsOwner)
         {
             m_networkPhysicsInteractable.Ungrab();
@@ -174,15 +173,14 @@ public class BallScoring : MonoBehaviour
         }
     }
 
+    // Handles collision logic: scoring, bounce counting, color update
     private void OnCollisionEnter(Collision collision)
     {
-
-        // If ball is in hand of player or we arent the owner, do nothing
+        // Do nothing if the ball is in hand or we are not the owner
         if (m_rigidbody.isKinematic || !m_networkPhysicsInteractable.IsOwner)
         {
             return;
         }
-
 
         // Regular bouncing and scoring
         if (collision.gameObject.CompareTag("Court") && m_networkPhysicsInteractable.isThrown == true)
@@ -198,17 +196,19 @@ public class BallScoring : MonoBehaviour
                 bounces++;
             }
 
-                if (bounces > maxBounces)
+            // If bounces exceed max, update score and respawn
+            if (bounces > maxBounces)
             {
                 UpdateScore();
                 RespawnBall();
                 return;
             }
 
-            // Update color
+            // Update ball color based on bounce count
             if (m_renderer != null && defaultBallMaterial != null)
             {
-                if (m_renderer.sharedMaterial != defaultBallMaterial) {
+                if (m_renderer.sharedMaterial != defaultBallMaterial)
+                {
                     m_renderer.sharedMaterial = defaultBallMaterial;
                 }
                 float colorValue = (float)bounces / (float)maxBounces;
@@ -216,24 +216,19 @@ public class BallScoring : MonoBehaviour
             }
         }
 
-        
         if (collision.gameObject.CompareTag("Respawn"))
         {
-            UpdateScore(true); // skip scoring
+            UpdateScore(true); // Penalty Flag is set
             RespawnBall();
             return;
         }
 
-        
+        // Penalty if colliding with BoundingBox (out of Bounds)
         if (collision.gameObject.CompareTag("BoundingBox"))
         {
-            UpdateScore(true); // penalty for last player thrown
-            RespawnBall();   
+            UpdateScore(true); // Penalty flag is set
+            RespawnBall();
+            return;
         }
-    }
-
-    private bool getIsThrown()
-    {
-        return m_networkPhysicsInteractable.isThrown;
     }
 }
