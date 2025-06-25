@@ -68,6 +68,9 @@ public class FinalScreen : MonoBehaviour
 
         Vector3 forward = cam.transform.forward;
         Vector3 spawnPosition = cam.transform.position + forward * distance;
+
+        spawnPosition.y = Mathf.Max(spawnPosition.y, 2f); // Clamp over Floor
+
         endScreenCanvas.transform.position = spawnPosition;
         endScreenCanvas.transform.LookAt(cam.transform);
         endScreenCanvas.transform.Rotate(0, 180, 0);
