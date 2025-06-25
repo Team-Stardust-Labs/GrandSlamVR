@@ -1026,7 +1026,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 618037188}
   sphere: {fileID: 150764586}
-  heightThreshold: 1.35
+  heightThreshold: 1
 --- !u!1 &150764588 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8435088010182828942, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
@@ -2328,19 +2328,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7097983257291049692, guid: dab67b71c6cad544f96bfc6f772295ea, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.93880886
+      value: 0.93605155
       objectReference: {fileID: 0}
     - target: {fileID: 7097983257291049692, guid: dab67b71c6cad544f96bfc6f772295ea, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.012018245
+      value: -0.0119829755
       objectReference: {fileID: 0}
     - target: {fileID: 7097983257291049692, guid: dab67b71c6cad544f96bfc6f772295ea, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.34420067
+      value: -0.35163006
       objectReference: {fileID: 0}
     - target: {fileID: 7097983257291049692, guid: dab67b71c6cad544f96bfc6f772295ea, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0044063157
+      value: -0.004501434
       objectReference: {fileID: 0}
     - target: {fileID: 7213068067505915920, guid: dab67b71c6cad544f96bfc6f772295ea, type: 3}
       propertyPath: Target.TrackingTarget
