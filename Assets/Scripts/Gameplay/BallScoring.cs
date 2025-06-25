@@ -187,12 +187,21 @@ public class BallScoring : MonoBehaviour
         // Regular bouncing and scoring
         if (collision.gameObject.CompareTag("Court") && m_networkPhysicsInteractable.isThrown == true)
         {
-            bounces++;
+            // Bounces of Player Blue only count on the Red Side
+            if (m_networkPhysicsInteractable.lastThrownPlayerColor == AssignPlayerColor.PlayerColor.Blue && transform.position.x > 0.0f)
+            {
+                bounces++;
+            }
+            // Bounces of Player Red only count on the Blue Side
+            else if (m_networkPhysicsInteractable.lastThrownPlayerColor == AssignPlayerColor.PlayerColor.Red && transform.position.x < 0.0f)
+            {
+                bounces++;
+            }
 
-            if (bounces > maxBounces)
+                if (bounces > maxBounces)
             {
                 UpdateScore();
-                RespawnBall();  
+                RespawnBall();
                 return;
             }
 
