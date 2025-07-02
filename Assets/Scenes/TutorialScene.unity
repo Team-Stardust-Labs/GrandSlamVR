@@ -4397,6 +4397,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1158910731}
   - component: {fileID: 1158910730}
+  - component: {fileID: 1158910732}
   m_Layer: 0
   m_Name: PlayerRoot
   m_TagString: Untagged
@@ -4443,6 +4444,103 @@ Transform:
   - {fileID: 415850085}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -0.798, z: 0}
+--- !u!114 &1158910732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1158910729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3b1c20614a04d54e8faca46dc57251b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerA:
+    m_Name: Trigger A
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: df5c68f0-f102-43c6-bd19-1b233128e48c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 2624a476-62a5-46ea-8d65-f7aa7a6b5cd2
+      m_Path: <PXR_Controller>{RightHand}/primaryButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Trigger A
+      m_Flags: 0
+    m_Flags: 0
+  triggerB:
+    m_Name: Trigger B
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 7f79aa61-e309-4a59-ae43-5f849c45c575
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 2e830c25-7dac-49f1-98e3-cedfc8e1f3ba
+      m_Path: <PXR_Controller>{RightHand}/secondaryButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Trigger B
+      m_Flags: 0
+    m_Flags: 0
+  triggerC:
+    m_Name: Trigger C
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 788b7b46-cb8b-4f70-af66-86d913da9467
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: c110574b-d4f3-46b3-b7dc-519f93185d4f
+      m_Path: <PXR_Controller>{RightHand}/{GripButton}
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Trigger C
+      m_Flags: 0
+    m_Flags: 0
+  triggerD:
+    m_Name: Trigger D
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a7287c84-3635-4b5d-adae-0af8bf891eda
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 46fc690c-d511-479a-9351-05ab0223902e
+      m_Path: <PXR_Controller>{RightHand}/{TriggerButton}
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Trigger D
+      m_Flags: 0
+    m_Flags: 0
+  activationTrigger:
+    m_Name: Activation Trigger
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: cf3d9061-472b-42aa-976b-21bf4ce3e120
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 8115f399-86d5-4436-8428-67445a57f690
+      m_Path: <PXR_Controller>{RightHand}/thumbstick
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Activation Trigger
+      m_Flags: 0
+    m_Flags: 0
 --- !u!1 &1175761808
 GameObject:
   m_ObjectHideFlags: 0
