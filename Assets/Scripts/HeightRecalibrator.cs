@@ -4,18 +4,20 @@ using System.Collections;
 
 public class HeightRecalibrator : MonoBehaviour
 {
-    public XROrigin xrOrigin;
+    public XROrigin xrOrigin; // Player XR Origin
 
+    // Loaded on scene start
     void Start()
     {
         if (xrOrigin == null)
         {
-            xrOrigin = FindObjectOfType<XROrigin>();
+            xrOrigin = FindObjectOfType<XROrigin>(); // Suche XR Origin
         }
         
         RecalibrateFloorHeight();
     }
 
+    // Trigger function
     public void RecalibrateFloorHeight()
     {
         if (xrOrigin != null)
@@ -26,10 +28,10 @@ public class HeightRecalibrator : MonoBehaviour
 
     private IEnumerator RecalibrateCoroutine()
     {
-        xrOrigin.RequestedTrackingOriginMode = XROrigin.TrackingOriginMode.Device;
+        xrOrigin.RequestedTrackingOriginMode = XROrigin.TrackingOriginMode.Device; // Tracking Origin: Device
 
-        yield return null;
+        yield return null; // Wait for next frame
 
-        xrOrigin.RequestedTrackingOriginMode = XROrigin.TrackingOriginMode.Floor;
+        xrOrigin.RequestedTrackingOriginMode = XROrigin.TrackingOriginMode.Floor; // Tracking Origin: Floor
     }
 }

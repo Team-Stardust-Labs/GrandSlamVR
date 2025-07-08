@@ -1,9 +1,7 @@
 using UnityEngine;
 
-/// <summary>
-/// Handles the display and positioning of the end screen UI when the game finishes.
-/// Shows which player has won and positions the canvas in front of the main camera.
-/// </summary>
+// Handles the display and positioning of the end screen UI when the game finishes.
+// Shows which player has won and positions the canvas in front of the main camera.
 public class FinalScreen : MonoBehaviour
 {
     public GameObject endScreenCanvas; // The main end screen canvas object
@@ -41,8 +39,8 @@ public class FinalScreen : MonoBehaviour
         }
     }
 
-    /// Shows the end screen for the player, positions and scales it in front of the camera,
-    /// and displays the correct winner.
+    // Shows the end screen for the player, positions and scales it in front of the camera,
+    // and displays the correct winner.
     void showEndScreenPlayer()
     {
         Camera cam = Camera.main;

@@ -1,4 +1,3 @@
-// PlatformModeInitializer.cs
 using UnityEngine;
 
 public class PlatformModeInitializer : MonoBehaviour
@@ -7,8 +6,11 @@ public class PlatformModeInitializer : MonoBehaviour
     {
         Debug.Log("PlatformModeInitializer: Awake() wurde aufgerufen.");
 
-        string targetRunMode = ""; // Variable, um zu sehen, was gesetzt werden soll
+        string targetRunMode = ""; // variable to store the run mode to be set in PlayerPrefs
 
+        // Build Platform Android means VR Headset -> VR Mode is to be set
+        // Build Platform Standalone (PC) means Spectator Mode -> Spectator Mode is to be set
+        // Else editor mode is set (for debugging purposes)
         #if UNITY_ANDROID
             Debug.Log("PlatformModeInitializer: UNITY_ANDROID ist definiert.");
             targetRunMode = StartupScript.VrModeValue;
@@ -37,18 +39,18 @@ public class PlatformModeInitializer : MonoBehaviour
             }
         #endif
 
-        // Zusätzliche Überprüfung, ob die Keys selbst null sind (sollte nicht passieren mit static readonly)
+        // Check if the PlayerPrefs key and targetRunMode are null to catch potential issues
         if (StartupScript.RunModePlayerPrefKey == null) {
             Debug.LogError("PlatformModeInitializer: FEHLER - StartupScript.RunModePlayerPrefKey ist NULL!");
         }
-        if (targetRunMode == null) { // targetRunMode sollte hier nie null sein, da es immer zugewiesen wird
+        if (targetRunMode == null) {
              Debug.LogError("PlatformModeInitializer: FEHLER - targetRunMode ist NULL! Das sollte nicht passieren.");
         }
 
-        PlayerPrefs.Save();
+        PlayerPrefs.Save(); // save the RunMode PlayerPrefs setting
         Debug.Log("PlatformModeInitializer: PlayerPrefs.Save() aufgerufen.");
 
-        // Testweise direkt nach dem Speichern wieder auslesen, um sicherzustellen, dass es geschrieben wurde
+        // Log the value of the PlayerPrefs key after saving
         if (PlayerPrefs.HasKey(StartupScript.RunModePlayerPrefKey))
         {
             string writtenValue = PlayerPrefs.GetString(StartupScript.RunModePlayerPrefKey);

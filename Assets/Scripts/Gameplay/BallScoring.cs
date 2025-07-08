@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using XRMultiplayer;
 
@@ -27,24 +24,22 @@ public class BallScoring : MonoBehaviour
     void Start()
     {
         currentBallSpawn = new GameObject("DefaultSpawn").transform;
-        m_rigidbody = GetComponent<Rigidbody>();
-        m_networkPhysicsInteractable = GetComponent<NetworkPhysicsInteractable>();
-        m_renderer = GetComponent<Renderer>();
+        m_rigidbody = GetComponent<Rigidbody>(); // Get the Rigidbody component for physics interactions
+        m_networkPhysicsInteractable = GetComponent<NetworkPhysicsInteractable>(); // Get the NetworkPhysicsInteractable component for network interactions
+        m_renderer = GetComponent<Renderer>(); // Get the Renderer component for color changes
 
+        // Ensure Renderer exists
         if (m_renderer == null)
         {
-            Debug.LogError("BallScoring: Renderer component not found on GameObject.", this.gameObject);
             return;
         }
 
         // Fallback if no material is assigned in the Inspector
         if (defaultBallMaterial == null)
         {
-            Debug.LogWarning("BallScoring: defaultBallMaterial not assigned in Inspector. Using current renderer's sharedMaterial as default. Please assign it in the Inspector for robustness.", this.gameObject);
             defaultBallMaterial = m_renderer.sharedMaterial;
             if (defaultBallMaterial == null)
             {
-                Debug.LogError("BallScoring: Renderer has no sharedMaterial to use as default, and defaultBallMaterial was not assigned.", this.gameObject);
                 return;
             }
         }
@@ -73,7 +68,7 @@ public class BallScoring : MonoBehaviour
             return;
         }
 
-        // Ensure the default material is set
+        // Set the Renderer to use the Ball Material
         if (m_renderer.sharedMaterial != defaultBallMaterial)
         {
             m_renderer.sharedMaterial = defaultBallMaterial;
@@ -85,7 +80,7 @@ public class BallScoring : MonoBehaviour
     }
 
     // Handles score updates and determines which player gets the point and where the ball respawns
-    // penaltyForLastPlayerThrown: If true, the last player who threw the ball gets a penalty
+    // penaltyForLastPlayerThrown: If true, the last player who threw the ball gets a penalty (used for throws out of bounds or hazards)
     private void UpdateScore(bool penaltyForLastPlayerThrown = false)
     {
         // Triggers when penalty is to be applied
@@ -94,19 +89,19 @@ public class BallScoring : MonoBehaviour
             // Give point to the opponent, respawn ball on their side
             if (m_networkPhysicsInteractable.lastThrownPlayerColor == AssignPlayerColor.PlayerColor.Blue)
             {
-                currentBallSpawn = ballSpawnPlayer2; // Spawn on red side
+                currentBallSpawn = ballSpawnPlayer2; // Blue made the mistake, spawn on red side
                 ScoreManager.Singleton.PointToPlayer2Request(); // ScoreManager handles Scoring
                 return;
             }
             else if (m_networkPhysicsInteractable.lastThrownPlayerColor == AssignPlayerColor.PlayerColor.Red)
             {
-                currentBallSpawn = ballSpawnPlayer1; // Spawn on blue side
+                currentBallSpawn = ballSpawnPlayer1; // Red made the mistake, spawn on blue side
                 ScoreManager.Singleton.PointToPlayer1Request(); // ScoreManager handles Scoring
                 return;
             }
         }
 
-        // Normal scoring based on ball position
+        // Normal scoring based on ball position when the point is to be scored
         if (transform.position.x > 0.0f)
         {
             // Point for player 1, ball to player 2
@@ -124,11 +119,12 @@ public class BallScoring : MonoBehaviour
     // Respawn logic when the ball is reset via button
     public void RespawnButtonCode()
     {
-        currentBallSpawn.position = new Vector3(-70.0f, 5.0f, 0);
+        currentBallSpawn.position = new Vector3(-70.0f, 5.0f, 0); // Spawns ball to Blue player side
 
         // Only move the object if we are the owner
         if (m_networkPhysicsInteractable.IsOwner)
         {
+            // Reset everything related to the ball
             m_networkPhysicsInteractable.Ungrab();
             m_rigidbody.linearVelocity = Vector3.zero;
             m_rigidbody.angularVelocity = Vector3.zero;
@@ -164,6 +160,7 @@ public class BallScoring : MonoBehaviour
         // Only move the object if we are the owner
         if (m_networkPhysicsInteractable.IsOwner)
         {
+            // Reset everything related to the ball
             m_networkPhysicsInteractable.Ungrab();
             m_rigidbody.linearVelocity = Vector3.zero;
             m_rigidbody.angularVelocity = Vector3.zero;
@@ -216,6 +213,7 @@ public class BallScoring : MonoBehaviour
             }
         }
 
+        // Penalty if colliding with Respawn (hazard; currently unused)
         if (collision.gameObject.CompareTag("Respawn"))
         {
             UpdateScore(true); // Penalty Flag is set

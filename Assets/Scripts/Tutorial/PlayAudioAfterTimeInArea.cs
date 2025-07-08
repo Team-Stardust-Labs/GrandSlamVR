@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class PlayAudioAfterTimeInArea : MonoBehaviour
 {
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private float timeInArea = 1.5f;
-    [SerializeField] private GameObject[] vanishObjects;
-    [SerializeField] private string objectTag;
+    [SerializeField] private AudioSource audioSource; // Audio source to play
+    [SerializeField] private float timeInArea = 1.5f; // Time in seconds the object must stay in the area to trigger the audio
+    [SerializeField] private GameObject[] vanishObjects; // Objects to disable after audio is played
+    [SerializeField] private string objectTag; // Tag of the object to detect
 
     private float timer = 0f;
     private bool isBallInArea = false;
@@ -16,7 +16,7 @@ public class PlayAudioAfterTimeInArea : MonoBehaviour
     {
         if (isBallInArea && !alreadyPlayed)
         {
-            timer += Time.deltaTime;
+            timer += Time.deltaTime; // Increment timer
 
             if (timer >= timeInArea)
             {
@@ -31,6 +31,7 @@ public class PlayAudioAfterTimeInArea : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Compare the object tag with the specified tag
         if (other.CompareTag(objectTag))
         {
             isBallInArea = true;
@@ -38,6 +39,7 @@ public class PlayAudioAfterTimeInArea : MonoBehaviour
         }
     }
 
+    // Reset the timer and state when the object exits the area
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag(objectTag))

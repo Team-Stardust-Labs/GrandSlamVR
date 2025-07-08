@@ -3,20 +3,22 @@ using System.Collections.Generic;
 
 public class PhysicalWalkScaler : MonoBehaviour
 {
+    [Header("Walking")]
     public Transform vrCamera;
     public Transform playerRoot;
-    public float defaultScaleFactor = 1.2f;
-    public bool includeYMovement = false;
+    public float defaultScaleFactor = 1.2f; // Default walking scale factor | Im spiel: 1.2f (20%)
+    public bool includeYMovement = false; // Include Y-axis movement in scaling (up/down)
 
     [Header("Running")]
-    public bool enableRunningDetection = true;
-    public float runningScaleFactor = 5f;
     public Transform leftController;
     public Transform rightController;
-    public float runningDetectionThreshold = 1f;
-    public const int runningDetectionFrames = 30;
-    public float scaleAccelerationSpeed = 3f; 
-    public float scaleDecelerationSpeed = 10f;
+    public bool enableRunningDetection = true; // Enable running
+    public float runningScaleFactor = 5f; // Running scale factor | Im spiel: ca. 14.0f
+    public float runningDetectionThreshold = 1f; // When the total controller movement exceeds this threshold, running is detected | Im spiel: 1.1f
+    public const int runningDetectionFrames = 30; // Number of frames to consider for running detection
+    public float scaleAccelerationSpeed = 3f; // Im spiel: 1.0f
+    public float scaleDecelerationSpeed = 10f; // Im spiel: 16.0f
+
 
     private Vector3 lastHeadsetPosition;
     private float currentAppliedScaleFactor;
@@ -27,13 +29,14 @@ public class PhysicalWalkScaler : MonoBehaviour
     
     public bool IsRunning { get; private set; }
 
+
     void Start()
     {
         currentAppliedScaleFactor = defaultScaleFactor;
 
         if (leftController == null || rightController == null || vrCamera == null || playerRoot == null)
         {
-            Debug.LogError("Missing required references!");
+            Debug.LogError("Missing references!");
         }
         else
         {
@@ -55,7 +58,7 @@ public class PhysicalWalkScaler : MonoBehaviour
 
     void LateUpdate()
     {
-        if (enableRunningDetection && leftController != null && rightController != null)
+        if (enableRunningDetection)
         {
             UpdateControllerHistory();
             CheckForRunning();
@@ -81,7 +84,8 @@ public class PhysicalWalkScaler : MonoBehaviour
         {
             currentInterpolationSpeed = scaleDecelerationSpeed; // Slowing down
         }
-        
+
+        // Interpolates the current scale factor towards running or walking
         currentAppliedScaleFactor = Mathf.Lerp(currentAppliedScaleFactor, targetScaleFactor, Time.deltaTime * currentInterpolationSpeed);
 
         // Scale the movement
@@ -97,14 +101,14 @@ public class PhysicalWalkScaler : MonoBehaviour
             scaledDelta = delta * currentAppliedScaleFactor;
         }
 
+        // Apply scaled movement to the player
         playerRoot.position += playerRoot.TransformDirection(scaledDelta);
 
-
+        // Update headset position for next frame
         lastHeadsetPosition = currentHeadsetPosition;
     }
 
-    /// <summary>
-    /// Updates the local position history of the controllers.
+    // Update the local position history of the controllers
     void UpdateControllerHistory()
     {
         leftControllerLocalPositionHistory.Add(leftController.localPosition);
@@ -121,11 +125,11 @@ public class PhysicalWalkScaler : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Checks if the user is running based on the controller movement history
+    // Checks if the user is running based on the controller movement history
     void CheckForRunning()
     {
-        if (leftControllerLocalPositionHistory.Count < CONTROLLER_HISTORY_SIZE || 
+        // Return if not enough positions in history
+        if (leftControllerLocalPositionHistory.Count < CONTROLLER_HISTORY_SIZE ||
             rightControllerLocalPositionHistory.Count < CONTROLLER_HISTORY_SIZE)
         {
             IsRunning = false;
@@ -136,8 +140,10 @@ public class PhysicalWalkScaler : MonoBehaviour
         float rightMovementSum = 0f;
 
         // Calculate total movement for both controllers
+        // For each frame, calculate the distance between the current and previous position
         for (int i = 1; i < CONTROLLER_HISTORY_SIZE; i++)
         {
+            // Calculate distance between current and previous position
             leftMovementSum += Vector3.Distance(leftControllerLocalPositionHistory[i], leftControllerLocalPositionHistory[i - 1]);
             rightMovementSum += Vector3.Distance(rightControllerLocalPositionHistory[i], rightControllerLocalPositionHistory[i - 1]);
         }

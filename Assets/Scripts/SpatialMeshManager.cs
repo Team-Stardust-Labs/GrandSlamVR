@@ -189,8 +189,11 @@ namespace Unity.XR.PXR
             {
                 meshCollider.sharedMesh = mesh;
             }
-            
+
+            // -------------------------------
+            // Sets the position of the mesh object relative to the headset position and block position
             meshGameObject.transform.position = headset_offset.position + block.position;
+            // -------------------------------
             meshGameObject.transform.rotation = block.rotation;
 
             switch (block.state)
