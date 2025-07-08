@@ -1,4 +1,12 @@
-// SpectatorManager.cs
+/*
+Overview:
+SpectatorManager handles spectator mode in an XR Netcode application. It:
+  • Detects if the current session is spectator based on PlayerPrefs
+  • Activates a dedicated spectator camera and disables player spawning
+  • Starts and stops LAN discovery for auto-joining as a spectator
+  • Provides a hotkey to return to the startup scene and stop listening
+*/
+
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.SceneManagement;
@@ -12,61 +20,44 @@ public class SpectatorManager : MonoBehaviour
     public GameObject joinDiscoveryObject;   // Object with LanDiscoveryClient & ConnectToDiscoveredHost scripts
 
     private ConnectToDiscoveredHost lanConnector; // Reference to connection script
-    private bool isActiveAndAttemptingJoin = false; // Prevents multiple join attempts after success
+    private bool isActiveAndAttemptingJoin = false; // Prevents redundant join attempts
 
     void Awake()
     {
-        // Get reference to the LAN connector script
+        // Cache the connector component if assigned
         if (joinDiscoveryObject != null)
         {
             lanConnector = joinDiscoveryObject.GetComponent<ConnectToDiscoveredHost>();
-            if (lanConnector == null)
-            {
-                Debug.LogError("SpectatorManager: ConnectToDiscoveredHost script not found on joinDiscoveryObject!");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("SpectatorManager: joinDiscoveryObject not assigned in Inspector!");
         }
     }
 
-    // Returns true if the current run mode is spectator
+    // Determines if the current run mode equals spectator
     public static bool isSpectator()
     {
         string currentRunMode = PlayerPrefs.GetString(StartupScript.RunModePlayerPrefKey);
-
-        if (currentRunMode == StartupScript.SpectatorModeValue)
-        {
-            return true;
-        }
-        return false;
-
         return currentRunMode == StartupScript.SpectatorModeValue;
     }
 
     void Start()
     {
-        // Check run mode and initialize spectator mode if needed
         string currentRunMode = PlayerPrefs.GetString(StartupScript.RunModePlayerPrefKey);
 
         if (currentRunMode == StartupScript.SpectatorModeValue)
         {
-            InitializeSpectatorMode();
+            InitializeSpectatorMode(); // Enable spectator functionality
         }
         else
         {
-            // Disable spectator camera and this GameObject if not in spectator mode
+            // Disable if not in spectator mode
             if (spectatorCameraObject != null)
                 spectatorCameraObject.SetActive(false);
-
             gameObject.SetActive(false);
         }
     }
 
     void Update()
     {
-        // Press 'R' to stop discovery and return to startup scene to reload everything
+        // Press 'R' to stop discovery and reload startup scene
         if (Keyboard.current.rKey.wasPressedThisFrame)
         {
             if (joinDiscoveryObject != null)
@@ -77,64 +68,53 @@ public class SpectatorManager : MonoBehaviour
         }
     }
 
-    // Sets up spectator mode: camera, disables player prefab, starts LAN discovery
+    // Configures the scene and network for a spectator
     void InitializeSpectatorMode()
     {
         if (spectatorCameraObject != null)
         {
-            spectatorCameraObject.SetActive(true);
-            Camera.main.tag = "Untagged"; // Removes main Camera tag from the default camera
-            spectatorCameraObject.tag = "MainCamera"; // Sets main Camera to Spectator Camera, important for EndScreen UI
-        }
-        else
-        {
-            Debug.LogError("SpectatorManager: spectatorCameraObject not assigned!");
+            spectatorCameraObject.SetActive(true);    // Switch to spectator camera
+            Camera.main.tag = "Untagged";            // Remove tag from existing camera
+            spectatorCameraObject.tag = "MainCamera"; // Tag spectator camera for UI
         }
 
-        // Prevent spawning a player object for the spectator
+        // Prevent spawning a player avatar
         if (NetworkManager.Singleton != null && NetworkManager.Singleton.NetworkConfig != null)
         {
             NetworkManager.Singleton.NetworkConfig.PlayerPrefab = null;
         }
-        else
-        {
-            Debug.LogError("SpectatorManager: NetworkManager or NetworkConfig not found!");
-        }
 
-        // Start LAN discovery and auto-join attempts
+        // Start LAN discovery if not already connected
         if (joinDiscoveryObject != null && lanConnector != null)
         {
-            if (NetworkManager.Singleton == null || (!NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsServer))
+            bool notConnected = NetworkManager.Singleton == null
+                                || (!NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsServer);
+            if (notConnected)
             {
                 joinDiscoveryObject.SetActive(true);
                 InvokeRepeating(nameof(AttemptToJoinDiscoveredHost), 2.0f, 2.0f);
                 isActiveAndAttemptingJoin = true;
             }
         }
-        else
-        {
-            Debug.LogError("SpectatorManager: joinDiscoveryObject or lanConnector not initialized. Cannot start auto-join.");
-        }
     }
 
-    // Tries to connect to a discovered host if one is found
+    // Tries to auto-join a discovered host once an address is found
     void AttemptToJoinDiscoveredHost()
     {
-        // Check if we are still active and attempting to join to skip unnecessary attempts
         if (!isActiveAndAttemptingJoin)
             return;
 
         if (lanConnector != null && lanConnector.discovery != null && !string.IsNullOrEmpty(lanConnector.discovery.foundAddress))
         {
-            lanConnector.TryConnect(); // Should call NetworkManager.Singleton.StartClient()
+            lanConnector.TryConnect();            // Initiate Netcode client connection
             CancelInvoke(nameof(AttemptToJoinDiscoveredHost));
-            isActiveAndAttemptingJoin = false;
+            isActiveAndAttemptingJoin = false;   // Stop further attempts
         }
     }
 
     void OnDestroy()
     {
-        // Ensure InvokeRepeating is stopped when this object is destroyed
+        // Ensure any pending invokes are canceled
         CancelInvoke(nameof(AttemptToJoinDiscoveredHost));
     }
 }
