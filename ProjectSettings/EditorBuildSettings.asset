@@ -6,9 +6,19 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/StartupScene.unity
+    guid: 9bda9b72f2348824094ca362c59e70f5
+  - enabled: 1
+    path: Assets/Scenes/ConfigScene.unity
+    guid: fdff63a5022fa924e9ba43df07f36bce
+  - enabled: 1
+    path: Assets/Scenes/TutorialScene.unity
+    guid: ac51d16bdfcf1fb4e985229fdc92376a
+  - enabled: 1
     path: Assets/Scenes/FinalMapScene.unity
     guid: 8dde85d1b0cb34b5aa447453ab4402ea
   m_configObjects:
     Unity.XR.PXR.Settings: {fileID: 11400000, guid: d69d66bedbdd19c4fa950eccc0349fb8, type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: b72ab2a46d9094be38774d023beb4d34, type: 3}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: d36ace20a65d1df4d9fdc68a4eb88f52, type: 2}
   m_UseUCBPForAssetBundles: 0

@@ -7,14 +7,26 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<<< HEAD:Assets/Downloaded Assets/Polytope Studio/Lowpoly_Environments/Sources/Materials/PT_Fruit_Tree_Foliage_Mat 1.mat
+  m_Name: PT_Fruit_Tree_Foliage_Mat 1
+  m_Shader: {fileID: 4800000, guid: 77e1a76a38ecd5a46a270afb12894dd5, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _CUSTOMWIND_ON
+  - _TRANSLUCENCYONOFF_ON
+  m_InvalidKeywords:
+  - _ALPHAPREMULTIPLY_ON
+========
   m_Name: everest.jpg-removebg-preview
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 10101, guid: 0000000000000000e000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
+>>>>>>>> origin/development:Assets/Scenes/Materials/everest.jpg-removebg-preview.mat
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -23,6 +35,13 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+<<<<<<<< HEAD:Assets/Downloaded Assets/Polytope Studio/Lowpoly_Environments/Sources/Materials/PT_Fruit_Tree_Foliage_Mat 1.mat
+    - _BaseTexture:
+        m_Texture: {fileID: 2800000, guid: 3860914bdbefac044bf9fba174129e49, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+========
+>>>>>>>> origin/development:Assets/Scenes/Materials/everest.jpg-removebg-preview.mat
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -47,6 +66,18 @@ Material:
         m_Texture: {fileID: 2800000, guid: 4b612821de7e5456c90c9d87ca0ca016, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Mask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Matcap_01:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Matcap_02:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -59,26 +90,89 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+<<<<<<<< HEAD:Assets/Downloaded Assets/Polytope Studio/Lowpoly_Environments/Sources/Materials/PT_Fruit_Tree_Foliage_Mat 1.mat
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+========
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutoff: 0.5
+>>>>>>>> origin/development:Assets/Scenes/Materials/everest.jpg-removebg-preview.mat
     - _BumpScale: 1
+    - _CUSTOMCOLORSTINTING: 0
+    - _CUSTOMWIND: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
+<<<<<<<< HEAD:Assets/Downloaded Assets/Polytope Studio/Lowpoly_Environments/Sources/Materials/PT_Fruit_Tree_Foliage_Mat 1.mat
+    - _DstBlend: 10
+========
     - _DstBlend: 0
+    - _FadeDistance: 25
+>>>>>>>> origin/development:Assets/Scenes/Materials/everest.jpg-removebg-preview.mat
     - _GlossMapScale: 1
-    - _Glossiness: 0.5
+    - _Glossiness: 0
     - _GlossyReflections: 1
+<<<<<<<< HEAD:Assets/Downloaded Assets/Polytope Studio/Lowpoly_Environments/Sources/Materials/PT_Fruit_Tree_Foliage_Mat 1.mat
+    - _Gradient: 0.123
+    - _GradientPower: 1.74
+    - _LeavesThickness: 0.5
+    - _MaskClipValue: 0.5
     - _Metallic: 0
+    - _Mode: 3
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _SNOWONOFF: 0
+    - _Smoothness: 0
+========
+    - _Light_O: 0
+    - _Light_Power: 1
+    - _MatcapIntensity: 0
+    - _MaxTiling: 4
+    - _Metallic: 0
+    - _MinTiling: 1
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+>>>>>>>> origin/development:Assets/Scenes/Materials/everest.jpg-removebg-preview.mat
     - _SmoothnessTextureChannel: 0
+    - _SnowAmount: 1
+    - _SnowCoverage: 0.45
+    - _SnowGradient: 0.83
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+<<<<<<<< HEAD:Assets/Downloaded Assets/Polytope Studio/Lowpoly_Environments/Sources/Materials/PT_Fruit_Tree_Foliage_Mat 1.mat
+    - _TRANSLUCENCYONOFF: 1
+    - _TransAmbient: 0.7
+    - _TransDirect: 1
+    - _TransNormalDistortion: 0.1
+    - _TransScattering: 2
+    - _TransShadow: 0.9
+    - _Translucency: 10
+========
+    - _StartDistance: 5
+>>>>>>>> origin/development:Assets/Scenes/Materials/everest.jpg-removebg-preview.mat
     - _UVSec: 0
-    - _ZWrite: 1
+    - _WINDMASKONOFF: 0
+    - _WindDensity: 3.3
+    - _WindMovement: 0.5
+    - _WindStrength: 0.3
+    - _ZWrite: 0
+    - __dirty: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+<<<<<<<< HEAD:Assets/Downloaded Assets/Polytope Studio/Lowpoly_Environments/Sources/Materials/PT_Fruit_Tree_Foliage_Mat 1.mat
+    - _GroundColor: {r: 1, g: 0, b: 0, a: 1}
+    - _TopColor: {r: 0.5754717, g: 0.5186884, b: 0.04071733, a: 1}
+========
+    - _Light: {r: 0, g: 0, b: 0, a: 0}
+    - _LightColor_01: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
+    - _LightColor_02: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
+    - _Tint: {r: 1, g: 1, b: 1, a: 0}
+>>>>>>>> origin/development:Assets/Scenes/Materials/everest.jpg-removebg-preview.mat
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -1,12 +1,16 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Textures/kloofendal_48d_partly_cloudy_puresky_2k.hdr.meta
+guid: db61217a6718243bb9f92c8dd28e4b26
+========
 guid: b3279fbb093d04186b909d18e9243e43
+>>>>>>>> origin/development:Assets/Textures/grass.jpg.meta
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0

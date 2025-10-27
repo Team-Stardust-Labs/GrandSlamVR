@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Materials/Ball.mat.meta
+guid: 67e827e4ef5af451b95d7c53c9e62ef4
+========
+guid: bce97139658ef49bf9859148836c1cce
+>>>>>>>> origin/development:Assets/Materials/ADS.mat.meta
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

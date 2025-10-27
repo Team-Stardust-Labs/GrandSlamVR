@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Prefabs/CenterWall.prefab.meta
+guid: a89dd90912bc9d04a8b430f67778a6f1
+========
 guid: 0d5d3a94efd1e2f49a4b9aab5fcd848c
+>>>>>>>> origin/development:Assets/Prefabs/BallTrail.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 

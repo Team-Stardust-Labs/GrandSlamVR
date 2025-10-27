@@ -9,12 +9,11 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: CourtGridBorder
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
+  m_Parent: {fileID: 2100000, guid: 29b4744d96cf6f741aa5d0c77214c03d, type: 2}
+  m_ModifiedSerializedProperties: 30
   m_ValidKeywords:
   - _ALPHAPREMULTIPLY_ON
   - _DETAIL_MULX2
-  - _EMISSION
   m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 1
@@ -27,62 +26,32 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _BumpMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
         m_Texture: {fileID: 2800000, guid: 30c625deb12364e2a862ff5f2f443749, type: 3}
-        m_Scale: {x: 30, y: 45}
-        m_Offset: {x: 0, y: 0}
-    - _DetailMask:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailNormalMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 40, y: 40}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 2800000, guid: 30c625deb12364e2a862ff5f2f443749, type: 3}
-        m_Scale: {x: 150, y: 450}
+        m_Scale: {x: 80, y: 80}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 2dff5adea12524533af87253601ac4e7, type: 3}
-        m_Scale: {x: 150, y: 450}
-        m_Offset: {x: 0, y: 0}
-    - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _OcclusionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _ParallaxMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Texture: {fileID: 2800000, guid: 30c625deb12364e2a862ff5f2f443749, type: 3}
+        m_Scale: {x: 80, y: 80}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BumpScale: 1
-    - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
     - _GlossMapScale: 0.38
     - _Glossiness: 1
     - _GlossyReflections: 1
-    - _Metallic: 0.15
+    - _Metallic: 0
     - _Mode: 3
-    - _OcclusionStrength: 1
-    - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 1
-    - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 0.759434, g: 0.94095117, b: 1, a: 0.57254905}
+    - _Color: {r: 0, g: 0, b: 0, a: 0.5254902}
     - _EmissionColor: {r: 0.33481097, g: 0.32783014, b: 0.49999994, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

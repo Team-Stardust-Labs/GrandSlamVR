@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Materials/Mountain.mat.meta
+guid: e4f665b01becb9a4096b9f87542e991e
+========
 guid: 2959b6b13449846209f4aad95b239320
+>>>>>>>> development:Assets/Materials/Chevron.mat.meta
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 2100000

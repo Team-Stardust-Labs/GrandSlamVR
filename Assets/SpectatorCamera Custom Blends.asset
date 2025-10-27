@@ -1,0 +1,202 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36baaa8bdcb9d8b49b9199833965d2c3, type: 3}
+  m_Name: SpectatorCamera Custom Blends
+  m_EditorClassIdentifier: 
+  CustomBlends:
+  - From: ScoreboardCamera
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 1
+      Time: 8
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: TotalCameraLeft
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 1
+      Time: 20
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: TotalCameraRight
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 1
+      Time: 20
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: BluePlayerCamera
+    To: RedPlayerCamera
+    Blend:
+      Style: 1
+      Time: 8
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: RedPlayerCamera
+    To: BluePlayerCamera
+    Blend:
+      Style: 1
+      Time: 8
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: BallChaseRedThrow
+    To: BluePlayerCamera
+    Blend:
+      Style: 1
+      Time: 12
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: BallChaseRedThrow
+    To: RedPlayerCamera
+    Blend:
+      Style: 1
+      Time: 5
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: BallChaseBlueThrow
+    To: BluePlayerCamera
+    Blend:
+      Style: 1
+      Time: 5
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: BallChaseBlueThrow
+    To: RedPlayerCamera
+    Blend:
+      Style: 1
+      Time: 12
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: RiverCamera
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 1
+      Time: 12
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: '**ANY CAMERA**'
+    To: BallChaseBlueThrow
+    Blend:
+      Style: 0
+      Time: 0
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: '**ANY CAMERA**'
+    To: BallChaseRedThrow
+    Blend:
+      Style: 0
+      Time: 0
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: '**ANY CAMERA**'
+    To: TotalCameraRight
+    Blend:
+      Style: 0
+      Time: 0
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: '**ANY CAMERA**'
+    To: TotalCameraLeft
+    Blend:
+      Style: 0
+      Time: 0
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: '**ANY CAMERA**'
+    To: TotalCamera
+    Blend:
+      Style: 0
+      Time: 0
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: '**ANY CAMERA**'
+    To: RiverCamera
+    Blend:
+      Style: 0
+      Time: 12
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: '**ANY CAMERA**'
+    To: ScoreboardCamera
+    Blend:
+      Style: 0
+      Time: 12
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4

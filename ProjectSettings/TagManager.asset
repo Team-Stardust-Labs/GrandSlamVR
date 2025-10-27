@@ -14,12 +14,12 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - SpectatorUI
   - 
   - PrimaryHand
   - SecondaryHand
   - CenterWall
-  - 
+  - TutorialWalls
   - 
   - XR-HitboxOnly
   - 
@@ -43,6 +43,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: SpectatorUI
+    uniqueID: 2154176701
     locked: 0
   m_RenderingLayers:
   - Default

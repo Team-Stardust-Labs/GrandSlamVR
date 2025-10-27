@@ -166,14 +166,14 @@ QualitySettings:
     name: High
     pixelLightCount: 2
     shadows: 2
-    shadowResolution: 1
+    shadowResolution: 2
     shadowProjection: 1
     shadowCascades: 2
-    shadowDistance: 40
+    shadowDistance: 400
     shadowNearPlaneOffset: 3
-    shadowCascade2Split: 0.33333334
+    shadowCascade2Split: 0.3079096
     shadowCascade4Split: {x: 0.06666667, y: 0.2, z: 0.46666667}
-    shadowmaskMode: 1
+    shadowmaskMode: 0
     skinWeights: 2
     globalTextureMipmapLimit: 0
     textureMipmapLimitSettings: []
@@ -319,4 +319,6 @@ QualitySettings:
     terrainMaxTrees: 50
     excludedTargetPlatforms: []
   m_TextureMipmapLimitGroupNames: []
-  m_PerPlatformDefaultQuality: {}
+  m_PerPlatformDefaultQuality:
+    Android: 2
+    Standalone: 2
