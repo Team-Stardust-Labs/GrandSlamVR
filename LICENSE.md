@@ -26,7 +26,7 @@ If you want commercial rights, you must obtain written permission from the copyr
 
 If you share or use the Software or any derivative publicly, you must:
 
-* Give clear credit to: **<YOUR NAME / PROJECT NAME>**
+* Give clear credit to: **STARDUST LABS / GRAND-SLAM-VR**
 * Link to the original repository
 * Indicate if you made changes
 
